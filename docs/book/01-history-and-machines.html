@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<title>History &amp; Machines &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../prerequisites.html">Prerequisites</a>
+  </nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a class="active" href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="08-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="09-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="10-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 1 &middot; Talk</span>
+    <h1>History &amp; Machines</h1>
+    <p class="lede">Before qubits and Bloch spheres, a quick tour of why computing needed a new idea at all &mdash; and a first look at what a classical machine and a quantum machine actually look like, side by side.</p>
+
+    <h2>A Brief History of Computing</h2>
+    <p>The first "computers" weren't electronic at all. Mechanical calculators &mdash; gears, levers, and cranks &mdash; could add and multiply, but every operation was a physical, moving part clanking through its motion. They were reliable in principle, but slow, bulky, and limited to arithmetic.</p>
+    <p>Vacuum tubes changed that in the mid-20th century. Machines like ENIAC used thousands of glass tubes as switches, finally giving computing the speed of electricity instead of the speed of gears. The catch: tubes were power-hungry, generated enormous heat, and burned out constantly &mdash; a single failed tube among thousands could halt the whole machine.</p>
+    <p>The transistor, invented in 1947, replaced fragile glowing glass with a small, solid-state switch. Transistors were smaller, cooler, cheaper, and dramatically more reliable. It was the transistor that made computing something you could put on a desk instead of in a warehouse.</p>
+    <p>Then came the integrated circuit &mdash; etching many transistors onto a single chip &mdash; and with it, Moore's Law: roughly every two years, engineers doubled the number of transistors that could fit on a chip of the same size. That trend held for decades and is the entire reason your phone is more powerful than a room-sized 1970s mainframe.</p>
+    <p>But that doubling is hitting a wall. Modern transistors are now just a few nanometers across &mdash; a handful of atoms wide. At that scale, quantum effects like electron tunneling start to leak current where it shouldn't be, heat becomes nearly impossible to dissipate, and the classical assumption that a bit is cleanly "0 or 1" starts to strain against physics itself.</p>
+    <p>That wall is exactly why quantum computing matters. Instead of fighting quantum effects at the atomic scale, quantum computers <em>embrace</em> them as the basic resource &mdash; a fundamentally different way to compute, not just a smaller, faster version of the same one.</p>
+
+    <div class="timeline" style="margin-top:2rem;">
+      <div class="tl-item type-talk">
+        <div class="tl-time">1600s&ndash;1800s</div>
+        <div class="tl-body"><h3>Mechanical Calculators</h3><p>Gears and levers. Arithmetic at the speed of moving parts.</p></div>
+        <div class="tl-badge">Milestone</div>
+      </div>
+      <div class="tl-item type-talk">
+        <div class="tl-time">1940s</div>
+        <div class="tl-body"><h3>Vacuum Tubes</h3><p>Electronic switching arrives &mdash; fast, but hot and fragile.</p></div>
+        <div class="tl-badge">Milestone</div>
+      </div>
+      <div class="tl-item type-talk">
+        <div class="tl-time">1947&ndash;1960s</div>
+        <div class="tl-body"><h3>The Transistor</h3><p>Small, cool, reliable solid-state switching. Computing gets personal.</p></div>
+        <div class="tl-badge">Milestone</div>
+      </div>
+      <div class="tl-item type-talk">
+        <div class="tl-time">1960s&ndash;2010s</div>
+        <div class="tl-body"><h3>Integrated Circuits &amp; Moore's Law</h3><p>Billions of transistors per chip. Decades of exponential doubling.</p></div>
+        <div class="tl-badge">Milestone</div>
+      </div>
+      <div class="tl-item type-hands-on">
+        <div class="tl-time">Today</div>
+        <div class="tl-body"><h3>The Atomic-Scale Wall</h3><p>Transistors can't shrink much further. Quantum computing offers a different axis of progress entirely.</p></div>
+        <div class="tl-badge">Now</div>
+      </div>
+    </div>
+
+    <h2>Classical Computer vs Quantum Computer</h2>
+    <p>These two machines don't just run different software &mdash; they're built on entirely different physical principles. Drag either side below to look at it from any angle.</p>
+
+    <div class="bloch-wrap" style="max-width:720px;margin:1.5rem auto;">
+      <div class="bloch-canvas" id="machine-compare" style="height:340px;"></div>
+      <div class="bloch-desc">Illustrative, not to scale &mdash; the point is the contrast, not engineering accuracy. Drag to rotate.</div>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Classical Processor</th><th>Quantum Processor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Operates at room temperature</td><td>Cooled to near absolute zero (~15 millikelvin)</td></tr>
+        <tr><td>Billions of transistors, deterministic switching</td><td>Dozens to thousands of qubits, probabilistic states</td></tr>
+        <tr><td>Error rates near zero per operation</td><td>Error rates still relatively high &mdash; active research area</td></tr>
+        <tr><td>Excels at: everyday computing, deterministic logic, general-purpose tasks</td><td>Excels at: simulation, optimization, search, and specific structured problems</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Bit vs Qubit &mdash; Now in 3D on Both Sides</h2>
+    <p>A classical bit is a switch: off or on, 0 or 1, full stop. A qubit is a point that can sit <em>anywhere</em> on the surface of a sphere &mdash; not just at the two poles. Below, both are rendered in 3D so you can compare them on equal footing.</p>
+
+    <div class="compare-visual">
+      <div class="compare-col">
+        <h3 style="color:var(--accent-2)">Classical Bit</h3>
+        <div class="bloch-canvas" id="bit-cube" style="height:200px;"></div>
+        <p style="color:var(--text-dim);font-size:0.9rem;">A cube that can only ever show one of two faces: 0 or 1. Deterministic. No in-between.</p>
+        <button class="gate-btn" id="flipCubeBtn" style="margin-top:0.5rem;">Flip it</button>
+      </div>
+      <div class="compare-vs">VS</div>
+      <div class="compare-col">
+        <h3 style="color:var(--accent-3)">Qubit</h3>
+        <div class="bloch-canvas" id="bloch-intro" style="height:200px;"></div>
+        <p style="color:var(--text-dim);font-size:0.9rem;">A point anywhere on a sphere's surface. Probabilistic until measured. Drag to rotate.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>The core contrast:</strong> a classical bit can only ever be at one of two discrete states &mdash; flip it and it snaps instantly from one face to the other. A qubit's state is a continuous point on a whole sphere of possibilities, and that continuum is where quantum algorithms find their extra power.
+    </div>
+
+    <h2>What Is a Quantum Computer &amp; How Does It Work?</h2>
+    <p>At the most basic level, a quantum computer is built from <strong>qubits</strong> &mdash; the quantum equivalent of a bit, but capable of existing in a blend of 0 and 1 at once. Two properties make qubits genuinely powerful:</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Superposition</h3>
+        <p>A qubit can be in a mixture of |0&rang; and |1&rang; simultaneously, with certain probabilities of measuring each outcome. This lets a set of qubits represent many possible combinations of 0s and 1s at once, instead of just one.</p>
+      </div>
+      <div class="card">
+        <h3>Entanglement</h3>
+        <p>Two or more qubits can become correlated in a way that has no classical equivalent &mdash; measuring one instantly tells you something about the others, no matter how they're arranged. This is the resource that lets quantum algorithms coordinate information in ways classical bits simply can't.</p>
+      </div>
+    </div>
+    <p>Put simply: a quantum processor is a machine that manipulates probability amplitudes via <strong>gates</strong> &mdash; precise, reversible operations &mdash; until a final <strong>measurement</strong> collapses that rich, probabilistic state down to an ordinary, classical answer: a string of 0s and 1s.</p>
+
+    <div class="callout warn">
+      <strong>An honest caveat:</strong> quantum computers are <em>not</em> "faster classical computers." They won't speed up everyday tasks like browsing the web or running a spreadsheet. Their advantage is narrow but real &mdash; specific problem classes like search, simulation, optimization, and factoring, which is exactly where Part 4: Real Algorithms (Chapter 7) picks up later in this book.
+    </div>
+
+    <div class="callout">
+      <strong>Coming up:</strong> now let's build the intuition further with two everyday analogies &mdash; a spinning coin and a pair of linked coins &mdash; before we get hands-on with the Bloch sphere in Chapter 3.
+    </div>
+
+    <div class="pagenav">
+      <a href="../prerequisites.html"><small>Back</small>&larr; Prerequisites</a>
+      <a class="to-next" href="02-why-quantum.html"><small>Next</small>Why Quantum? &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../assets/bloch.js"></script>
+<script src="../assets/machine-3d.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.__blochInstances = window.__blochInstances || {};
+  window.__blochInstances["bloch-intro"] = EntangleBloch.createBlochSphere("bloch-intro", { autoSpin: true });
+
+  EntangleMachine3D.createMachineComparison("machine-compare");
+  const bitCube = EntangleMachine3D.createBitCube("bit-cube", { autoSpin: true, initial: 0 });
+
+  document.getElementById("flipCubeBtn").addEventListener("click", function () {
+    bitCube.flip();
+  });
+</script>

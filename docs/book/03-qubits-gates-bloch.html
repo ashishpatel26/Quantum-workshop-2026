@@ -18,20 +18,21 @@
     <button class="sidebar-toggle">&#9776; Chapters</button>
     <h4>Workshop Book</h4>
     <ol>
-      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
-      <li><a class="active" href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
-      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
-      <li><a href="04-entanglement.html">Entanglement</a></li>
-      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
-      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
-      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
-      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
-      <li><a href="09-where-next.html">Where to Go Next</a></li>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a class="active" href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="08-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="09-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="10-where-next.html">Where to Go Next</a></li>
     </ol>
   </aside>
 
   <main class="book-content">
-    <span class="kicker">Chapter 2 &middot; Talk</span>
+    <span class="kicker">Chapter 3 &middot; Talk</span>
     <h1>Qubits, Gates &amp; the Bloch Sphere</h1>
     <p class="lede">Every single-qubit state can be pictured as a point on a sphere. Gates are just rotations of that point. Drag any sphere below to look at it from any angle.</p>
 
@@ -126,6 +127,32 @@
 
     </div>
 
+    <h2>CNOT &mdash; The Two-Qubit Gate</h2>
+    <p>Every gate so far acts on a single qubit, so a single Bloch sphere is enough to show what it does. CNOT (Controlled-NOT) is different: it acts on <em>two</em> qubits at once, so we show it as two Bloch spheres side by side &mdash; one for the control qubit, one for the target.</p>
+    <p><strong>CNOT is the gate that creates entanglement when combined with Hadamard</strong> &mdash; it flips the target qubit only when the control qubit is 1. Set the control below, then apply CNOT and watch the target react.</p>
+
+    <div class="gate-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="card">
+        <h3>Control Qubit</h3>
+        <p>Set this to |0&rang; or |1&rang; first. It is never changed by CNOT itself.</p>
+        <div class="bloch-canvas" id="bloch-cnot-control" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" id="cnotControl0Btn">Set |0&rang;</button>
+          <button class="gate-btn" id="cnotControl1Btn">Set |1&rang;</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Target Qubit</h3>
+        <p>Flips (180&deg; X rotation) only if the control is |1&rang; when CNOT is applied.</p>
+        <div class="bloch-canvas" id="bloch-cnot-target" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" id="cnotApplyBtn">Apply CNOT</button>
+          <button class="gate-btn reset" id="cnotResetBtn">Reset Both</button>
+        </div>
+      </div>
+    </div>
+    <p id="cnotStatus" style="text-align:center;color:var(--text-dim);font-size:0.9rem;">Control is currently |0&rang; &mdash; applying CNOT will leave the target unchanged.</p>
+
     <details class="curious">
       <summary>For the curious: the matrices</summary>
       <p>No linear algebra is required for this workshop, but if you want the formal definitions:</p>
@@ -148,12 +175,12 @@ plot_bloch_multivector(state)</code></pre>
     <p>Running this in a notebook renders a static image of the Bloch sphere for your circuit's current state &mdash; the same kind of picture you've been dragging around above, generated from the real math.</p>
 
     <div class="callout">
-      <strong>Next up:</strong> put this into practice for real. In Chapter 3 we build our first Qiskit circuit and measure it on a simulator.
+      <strong>Next up:</strong> put this into practice for real. In Chapter 4 we build our first Qiskit circuit and measure it on a simulator.
     </div>
 
     <div class="pagenav">
-      <a href="01-why-quantum.html"><small>Back</small>&larr; Why Quantum?</a>
-      <a class="to-next" href="03-hands-on-1-first-circuit.html"><small>Next</small>Hands-On 1: First Circuit &rarr;</a>
+      <a href="02-why-quantum.html"><small>Back</small>&larr; Why Quantum?</a>
+      <a class="to-next" href="04-hands-on-1-first-circuit.html"><small>Next</small>Hands-On 1: First Circuit &rarr;</a>
     </div>
   </main>
 </div>
@@ -170,5 +197,42 @@ plot_bloch_multivector(state)</code></pre>
   window.__blochInstances = window.__blochInstances || {};
   ["bloch-main","bloch-x","bloch-h","bloch-z","bloch-y","bloch-s","bloch-t"].forEach(function (id) {
     window.__blochInstances[id] = EntangleBloch.createBlochSphere(id, { autoSpin: true });
+  });
+
+  // --- CNOT two-qubit demo ---
+  var cnotControlSphere = EntangleBloch.createBlochSphere("bloch-cnot-control", { autoSpin: true });
+  var cnotTargetSphere = EntangleBloch.createBlochSphere("bloch-cnot-target", { autoSpin: true });
+  window.__blochInstances["bloch-cnot-control"] = cnotControlSphere;
+  window.__blochInstances["bloch-cnot-target"] = cnotTargetSphere;
+
+  var cnotControlIsOne = false;
+  var cnotStatus = document.getElementById("cnotStatus");
+
+  function updateCnotStatus() {
+    cnotStatus.textContent = cnotControlIsOne
+      ? "Control is currently |1⟩ — applying CNOT will flip the target."
+      : "Control is currently |0⟩ — applying CNOT will leave the target unchanged.";
+  }
+
+  document.getElementById("cnotControl0Btn").addEventListener("click", function () {
+    cnotControlSphere.reset();
+    cnotControlIsOne = false;
+    updateCnotStatus();
+  });
+  document.getElementById("cnotControl1Btn").addEventListener("click", function () {
+    cnotControlSphere.applyGate("X");
+    cnotControlIsOne = true;
+    updateCnotStatus();
+  });
+  document.getElementById("cnotApplyBtn").addEventListener("click", function () {
+    if (cnotControlIsOne) {
+      cnotTargetSphere.applyGate("X");
+    }
+  });
+  document.getElementById("cnotResetBtn").addEventListener("click", function () {
+    cnotControlSphere.reset();
+    cnotTargetSphere.reset();
+    cnotControlIsOne = false;
+    updateCnotStatus();
   });
 </script>

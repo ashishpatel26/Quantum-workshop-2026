@@ -15,20 +15,21 @@
     <button class="sidebar-toggle">&#9776; Chapters</button>
     <h4>Workshop Book</h4>
     <ol>
-      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
-      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
-      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
-      <li><a href="04-entanglement.html">Entanglement</a></li>
-      <li><a class="active" href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
-      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
-      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
-      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
-      <li><a href="09-where-next.html">Where to Go Next</a></li>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a class="active" href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="08-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="09-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="10-where-next.html">Where to Go Next</a></li>
     </ol>
   </aside>
 
   <main class="book-content">
-    <span class="kicker">Chapter 5 &middot; Hands-On Lab</span>
+    <span class="kicker">Chapter 6 &middot; Hands-On Lab</span>
     <h1>Building a Bell State</h1>
     <p class="lede">Two qubits, two gates, one proof of entanglement. Let's build it.</p>
 
@@ -62,7 +63,7 @@ plot_histogram(counts)</code></pre>
     <p><code>qc.cx(0, 1)</code> is a <strong>controlled-NOT</strong> gate: if the control qubit (0) is |1&rang;, it flips the target qubit (1); if the control is |0&rang;, it does nothing. Combined with the Hadamard on qubit 0, this creates the entangled state: qubit 0 is in superposition, and the CNOT links qubit 1's fate to whatever qubit 0 ends up being.</p>
 
     <h2>Why Only 00 and 11 Ever Appear</h2>
-    <p>Look closely at the histogram from a real run: you will <em>only</em> ever see <code>'00'</code> and <code>'11'</code> &mdash; never <code>'01'</code> or <code>'10'</code>. This is the visual proof of entanglement from Chapter 4: the two qubits always agree.</p>
+    <p>Look closely at the histogram from a real run: you will <em>only</em> ever see <code>'00'</code> and <code>'11'</code> &mdash; never <code>'01'</code> or <code>'10'</code>. This is the visual proof of entanglement from Chapter 5: the two qubits always agree.</p>
 
     <div class="histogram">
       <div class="hist-bar-col">
@@ -94,8 +95,8 @@ plot_histogram(counts)</code></pre>
     </div>
 
     <div class="pagenav">
-      <a href="04-entanglement.html"><small>Back</small>&larr; Entanglement</a>
-      <a class="to-next" href="06-real-algorithms.html"><small>Next</small>Real Algorithms &rarr;</a>
+      <a href="05-entanglement.html"><small>Back</small>&larr; Entanglement</a>
+      <a class="to-next" href="07-real-algorithms.html"><small>Next</small>Real Algorithms &rarr;</a>
     </div>
   </main>
 </div>

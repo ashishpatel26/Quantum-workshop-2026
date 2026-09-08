@@ -18,20 +18,21 @@
     <button class="sidebar-toggle">&#9776; Chapters</button>
     <h4>Workshop Book</h4>
     <ol>
-      <li><a class="active" href="01-why-quantum.html">Why Quantum?</a></li>
-      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
-      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
-      <li><a href="04-entanglement.html">Entanglement</a></li>
-      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
-      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
-      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
-      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
-      <li><a href="09-where-next.html">Where to Go Next</a></li>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a class="active" href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="08-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="09-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="10-where-next.html">Where to Go Next</a></li>
     </ol>
   </aside>
 
   <main class="book-content">
-    <span class="kicker">Chapter 1 &middot; Talk</span>
+    <span class="kicker">Chapter 2 &middot; Talk</span>
     <h1>Why Quantum?</h1>
     <p class="lede">Classical computers are wonderfully powerful &mdash; and fundamentally limited by how bits work. Quantum computers don't just go faster; they compute differently.</p>
 
@@ -40,7 +41,7 @@
     <p>A qubit in superposition is like a coin <em>spinning</em> in the air. While it's spinning, it isn't "really" heads or tails &mdash; it's in a blend of both possibilities, with certain odds of landing each way. The moment you slap your hand down and look (measure it), the spinning stops and it collapses to one definite outcome: heads or tails. Before that measurement, though, the spinning coin was doing something a flat coin never could &mdash; existing as a mixture of both states, and quantum algorithms exploit that mixture before it collapses.</p>
 
     <h2>Linked Coins: Entanglement</h2>
-    <p>Now imagine two coins that are magically linked so that however one lands, the other is <em>guaranteed</em> to land the opposite way &mdash; instantly, even if you take them to opposite sides of the room. Flip one, and you instantly know the other's outcome, without touching it. That's the everyday-language version of entanglement: two qubits sharing a single quantum state, so that measuring one immediately tells you about the other. We'll build this for real with Qiskit in Chapters 4 and 5.</p>
+    <p>Now imagine two coins that are magically linked so that however one lands, the other is <em>guaranteed</em> to land the opposite way &mdash; instantly, even if you take them to opposite sides of the room. Flip one, and you instantly know the other's outcome, without touching it. That's the everyday-language version of entanglement: two qubits sharing a single quantum state, so that measuring one immediately tells you about the other. We'll build this for real with Qiskit in Chapters 5 and 6.</p>
 
     <h2>Classical CPU vs Quantum Processor</h2>
     <p>Here's the comparison the whole workshop hangs on: a classical bit is a switch that's either off or on, full stop. A qubit is a point that can sit <em>anywhere</em> on the surface of a sphere &mdash; not just at the two poles.</p>
@@ -81,21 +82,21 @@
       </div>
       <div class="card">
         <h3>Optimization</h3>
-        <p>Logistics, finance portfolios, and scheduling problems often boil down to searching huge solution spaces. Quantum algorithms like Grover's (Chapter 6) offer provable speedups for exactly this kind of unstructured search.</p>
+        <p>Logistics, finance portfolios, and scheduling problems often boil down to searching huge solution spaces. Quantum algorithms like Grover's (Chapter 7) offer provable speedups for exactly this kind of unstructured search.</p>
       </div>
       <div class="card">
         <h3>Cryptography</h3>
-        <p>Shor's algorithm (also Chapter 6) can factor large numbers efficiently &mdash; the exact math problem that makes RSA encryption secure today. That's why "quantum-safe" cryptography is already a hot research area.</p>
+        <p>Shor's algorithm (also Chapter 7) can factor large numbers efficiently &mdash; the exact math problem that makes RSA encryption secure today. That's why "quantum-safe" cryptography is already a hot research area.</p>
       </div>
     </div>
 
     <div class="callout">
-      <strong>Coming up:</strong> in Chapter 2 we meet |0&rang; and |1&rang; properly and get hands-on with an interactive 3D Bloch sphere for every core gate.
+      <strong>Coming up:</strong> in Chapter 3 we meet |0&rang; and |1&rang; properly and get hands-on with an interactive 3D Bloch sphere for every core gate.
     </div>
 
     <div class="pagenav">
-      <a href="../prerequisites.html"><small>Back</small>&larr; Prerequisites</a>
-      <a class="to-next" href="02-qubits-gates-bloch.html"><small>Next</small>Qubits, Gates &amp; Bloch Sphere &rarr;</a>
+      <a href="01-history-and-machines.html"><small>Back</small>&larr; History &amp; Machines</a>
+      <a class="to-next" href="03-qubits-gates-bloch.html"><small>Next</small>Qubits, Gates &amp; Bloch Sphere &rarr;</a>
     </div>
   </main>
 </div>

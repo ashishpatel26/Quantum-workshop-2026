@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="A premium interactive hands-on quantum computing workshop using Qiskit Aer: qubits, gates, entanglement, Grover search, QRNG, simulation, and honest hardware limits." name="description"/>
+<title>Entangle: The Quantum Odyssey · Advanced Qiskit Aer Workshop</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="entangle-workshop.css" rel="stylesheet"/>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script defer="" src="entangle-workshop.js?v=5"></script>
+</head>
+<body>
+<canvas aria-hidden="true" id="quantumBackdrop"></canvas>
+<div aria-label="Quantum Computing 101 interactive presentation" id="stage" role="application">
+<header id="chromeTop">
+<div class="ct-left">
+<svg aria-hidden="true" class="pulse-mark" height="14" viewbox="0 0 16 14" width="16">
+<path d="M0 9h3l2-6 3 10 2-6 2 2h4" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</svg>
+<span>entangle/workshop-2026 <b>▸ qiskit-aer-lab</b></span>
+</div>
+<div class="ct-right">
+<button aria-pressed="false" class="chrome-action" id="editToggle" title="Toggle editable text (E)" type="button">edit:off</button>
+<button class="chrome-action" id="overviewToggle" title="Open slide overview (O)" type="button">overview</button>
+<span>state <b id="sessionId">—</b></span>
+<span id="slideNum">00 / 48</span>
+<span id="clock">--:--:-- UTC</span>
+</div>
+</header>
+<main id="deck"><section aria-labelledby="title-main" class="slide title-slide" data-name="boot" data-section="start">
+<div class="title-grid">
+<div class="title-copy">
+<div class="kicker"><span class="k-num">ROOT</span> Workshop path · intuition → code → experiments</div>
+<h1 class="hero-title" data-edit="" id="title-main">ENTANGLE<br/><span class="quantum-word">THE QUANTUM ODYSSEY</span></h1>
+<p class="hero-sub" data-edit="">Advanced Quantum Computing Workshop · Qiskit Aer Simulator · Build, simulate, measure, and explain every step</p>
+<div class="speaker-lockup">
+<div aria-hidden="true" class="speaker-orbit"><span>Q</span></div>
+<div>
+<strong>Ashish Patel</strong>
+<small>Silver Oak University IEEE Computer Society · 2026</small>
+</div>
+</div>
+</div>
+<div class="terminal-stack">
+<div class="panel boot-panel">
+<div class="panel-head"><span><i class="status-dot"></i> quantum-cli · session boot</span><span>root state</span></div>
+<div aria-live="polite" class="boot-log" id="bootLog"></div>
+</div>
+<div class="panel path-preview">
+<div class="panel-head"><span><i class="status-dot"></i> learning.path</span><span>6 phases · 49 states</span></div>
+<div aria-hidden="true" class="preview-track">
+<span style="--w:12%;--c:var(--cyan)"></span><span style="--w:19%;--c:var(--purple)"></span><span style="--w:22%;--c:var(--pink)"></span><span style="--w:22%;--c:var(--amber)"></span><span style="--w:17%;--c:var(--cyan)"></span><span style="--w:8%;--c:var(--purple)"></span>
+</div>
+<div class="preview-labels"><span>story</span><span>machines</span><span>information</span><span>gates</span><span>reality</span></div>
+</div>
+</div>
+</div>
+<div class="core"><b>start ▸</b> learn the physics model, then prove it with Qiskit Aer experiments.</div>
+</section><section class="advanced-slide slide" data-name="outcomes" data-section="start" data-title="What You Will Build">
+<div class="eyebrow">Workshop Outcomes</div><h2>By the end, you will have <span class="gradient">built</span> quantum programs.</h2>
+<div class="grid c3 mt2">
+<div class="card glow"><div class="stepnum">01</div><h3>Single Qubit</h3><p>Create, transform and measure a qubit.</p></div>
+<div class="card"><div class="stepnum">02</div><h3>Superposition</h3><p>Generate a 50/50 measurement distribution with H.</p></div>
+<div class="card"><div class="stepnum">03</div><h3>Bell Pair</h3><p>Entangle two qubits and observe correlated outcomes.</p></div>
+<div class="card"><div class="stepnum">04</div><h3>Statevector</h3><p>Inspect amplitudes before measurement.</p></div>
+<div class="card"><div class="stepnum">05</div><h3>Grover Search</h3><p>Amplify a marked state in a 2-qubit search space.</p></div>
+<div class="card"><div class="stepnum">06</div><h3>QRNG Circuit</h3><p>Turn measurement into random bits and strings.</p></div>
+</div>
+</section><section aria-labelledby="map-title" class="slide" data-name="learning-map" data-section="start">
+<div class="slide-head">
+<div class="kicker"><span class="k-num">01</span> Your route</div>
+<h2 class="slide-title" data-edit="" id="map-title">One journey: intuition → simulator → algorithms</h2>
+</div>
+<div class="body route-body">
+<div aria-hidden="true" class="route-line"></div>
+<article class="route-stop" style="--i:0;--tone:var(--cyan)"><b>01</b><span>Why quantum?</span><small>story</small></article>
+<article class="route-stop" style="--i:1;--tone:var(--purple)"><b>02</b><span>What is a qubit?</span><small>state</small></article>
+<article class="route-stop" style="--i:2;--tone:var(--pink)"><b>03</b><span>How do gates compute?</span><small>operations</small></article>
+<article class="route-stop" style="--i:3;--tone:var(--amber)"><b>04</b><span>How does Aer execute?</span><small>simulation</small></article>
+<article class="route-stop" style="--i:4;--tone:var(--cyan)"><b>05</b><span>How do algorithms amplify?</span><small>Grover</small></article>
+<article class="route-stop" style="--i:5;--tone:var(--purple)"><b>06</b><span>What can you build?</span><small>QRNG + next</small></article>
+</div>
+<div class="core"><b>promise ▸</b> every important term gets a meaning, a visual model, and working code.</div>
+</section><section class="advanced-slide slide" data-name="setup" data-section="start" data-title="Setup">
+<div class="part"><b>Preface</b> · Toolkit</div><h2 class="mt">Environment setup: one clean <span class="gradient">quantum workspace</span></h2>
+<div class="grid c2 mt">
+<div><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy">Copy</button></div><pre>python --version
+python -m venv .venv
+
+# macOS / Linux
+source .venv/bin/activate
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+pip install qiskit qiskit-aer matplotlib jupyter notebook</pre></div></div>
+<div><div class="card"><h3>What each package means</h3><div class="grid" style="gap:10px"><div class="term"><b>qiskit</b><span>Core SDK for creating and transforming quantum circuits.</span></div><div class="term"><b>qiskit-aer</b><span>High-performance local simulators for Qiskit circuits.</span></div><div class="term"><b>matplotlib</b><span>Plots circuits and measurement histograms.</span></div><div class="term"><b>jupyter / notebook</b><span>Interactive environment for workshop code cells.</span></div></div></div></div>
+</div><div class="source">Current Aer package: official Qiskit ecosystem docs.</div>
+</section><section class="advanced-slide slide" data-name="smoke-test" data-section="start" data-title="Smoke Test">
+<div class="eyebrow">Checkpoint 0</div><h2>Smoke test: can Qiskit + Aer <span class="gradient">run?</span></h2>
+<div class="grid c2 mt vcenter">
+<div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>smoke_test.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+qc = QuantumCircuit(<span class="num">1</span>, <span class="num">1</span>)
+qc.h(<span class="num">0</span>)
+qc.measure(<span class="num">0</span>, <span class="num">0</span>)
+
+sim = AerSimulator()
+compiled = transpile(qc, sim)
+result = sim.run(compiled, shots=<span class="num">100</span>).result()
+
+<span class="fn">print</span>(result.get_counts())</pre></div>
+<div><div class="card glow"><h3>Expected</h3><p>Something close to:</p><div class="formula mt">{'0': 48, '1': 52}</div><div class="callout mt"><b>Not exact.</b> Sampling varies from run to run. That variation is the point.</div></div><div class="checkpoint mt">✓ Environment ready</div></div>
+</div>
+</section><section aria-labelledby="history-title" class="slide" data-name="history" data-section="story">
+<div class="slide-head">
+<div class="kicker"><span class="k-num">02</span> A strange idea becomes a computer</div>
+<h2 class="slide-title" data-edit="" id="history-title">125 years in seven moments</h2>
+</div>
+<div class="body history-layout">
+<div aria-label="Quantum computing timeline" class="history-rail" role="list">
+<button class="history-node active" data-year="1900" type="button"><b>1900</b><span>Planck</span></button>
+<button class="history-node" data-year="1925" type="button"><b>1925–26</b><span>Quantum mechanics</span></button>
+<button class="history-node" data-year="1935" type="button"><b>1935</b><span>EPR</span></button>
+<button class="history-node" data-year="1982" type="button"><b>1982</b><span>Feynman</span></button>
+<button class="history-node" data-year="1985" type="button"><b>1985</b><span>Deutsch</span></button>
+<button class="history-node" data-year="1994" type="button"><b>1994</b><span>Shor</span></button>
+<button class="history-node" data-year="1996" type="button"><b>1996</b><span>Grover</span></button>
+</div>
+<div class="panel history-detail">
+<div class="panel-head"><span><i class="status-dot"></i> history.event</span><span id="historyCounter">01 / 07</span></div>
+<div class="history-year" id="historyYear">1900</div>
+<h3 id="historyName">Energy arrives in packets</h3>
+<p data-pretext="" id="historyText">Max Planck uses discrete energy packets to explain radiation. “Quantum” begins as a physics fix, not a computer idea.</p>
+<div class="history-impact"><span>why it matters</span><b id="historyImpact">Nature is not continuous at every scale.</b></div>
+</div>
+</div>
+<div class="core"><b>turn ▸</b> quantum computing began when physicists asked: can a machine compute using those same rules?</div>
+</section><section aria-labelledby="classical-title" class="slide" data-name="classical-engine" data-section="machines">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">03</span> Machine anatomy · classical</div>
+<h2 class="slide-title" data-edit="" id="classical-title">A computer is billions of tiny decisions</h2>
+</div>
+<div class="body machine-grid">
+<div class="panel scene-panel">
+<div class="panel-head"><span><i class="status-dot"></i> classical.machine · realistic 3D</span><span>drag to orbit</span></div>
+<div aria-label="Interactive realistic 3D model of a classical desktop computer with monitor, tower, CPU, memory, storage, motherboard, and data buses" class="scene-host" id="classicalScene" role="img">
+<div class="scene-fallback">3D model loading…</div>
+</div>
+<div class="scene-legend"><span class="cyan">● data</span><span class="purple">■ compute</span><span class="pink">▥ memory</span><span class="amber">▤ storage</span></div>
+</div>
+<div class="machine-copy">
+<div class="part-tabs" data-controller="classical">
+<button class="part-tab active" data-part="transistor" type="button">transistor</button>
+<button class="part-tab" data-part="logic" type="button">logic gate</button>
+<button class="part-tab" data-part="cpu" type="button">CPU</button>
+<button class="part-tab" data-part="memory" type="button">memory</button>
+<button class="part-tab" data-part="storage" type="button">storage</button>
+</div>
+<div class="panel part-readout">
+<div class="part-index" id="classicalPartIndex">01</div>
+<div><span id="classicalPartRole">switch</span><h3 id="classicalPartName">Transistor</h3><p data-pretext="" id="classicalPartText">A voltage controls whether current flows. One physical switch represents a reliable 0 or 1.</p></div>
+</div>
+<div class="process-line"><span>input</span><i></i><span>fetch</span><i></i><span>execute</span><i></i><span>store</span></div>
+<p class="plain-note">Software becomes instructions. The CPU transforms bits; memory keeps nearby bits; storage remembers them after power is removed.</p>
+</div>
+</div>
+<div class="core"><b>classical ▸</b> information is copied and processed as stable bit patterns through deterministic logic.</div>
+</section><section aria-labelledby="quantum-machine-title" class="slide" data-name="quantum-engine" data-section="machines">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">04</span> Machine anatomy · quantum</div>
+<h2 class="slide-title" data-edit="" id="quantum-machine-title">A quantum computer is a controlled physics experiment</h2>
+</div>
+<div class="body machine-grid reverse-grid">
+<div class="machine-copy">
+<div class="part-tabs" data-controller="quantum">
+<button class="part-tab active" data-part="host" type="button">host</button>
+<button class="part-tab" data-part="control" type="button">control</button>
+<button class="part-tab" data-part="cryostat" type="button">cryostat</button>
+<button class="part-tab" data-part="qpu" type="button">QPU</button>
+<button class="part-tab" data-part="readout" type="button">readout</button>
+</div>
+<div class="panel part-readout quantum-readout">
+<div class="part-index" id="quantumPartIndex">01</div>
+<div><span id="quantumPartRole">planner</span><h3 id="quantumPartName">Classical host</h3><p data-pretext="" id="quantumPartText">A normal computer builds the circuit, schedules the job, and interprets the measured results.</p></div>
+</div>
+<div class="hybrid-loop">
+<span>classical plan</span><b>→</b><span>quantum evolution</span><b>→</b><span>classical result</span>
+</div>
+<p class="plain-note">A QPU is an accelerator, not a replacement laptop. Different hardware uses different physical qubits; this model shows a superconducting system.</p>
+</div>
+<div class="panel scene-panel">
+<div class="panel-head"><span><i class="status-dot"></i> quantum.machine · realistic 3D</span><span>superconducting model</span></div>
+<div aria-label="Interactive realistic 3D model of a superconducting quantum computer with dilution refrigerator, control electronics, QPU chip, and readout chain" class="scene-host" id="quantumScene" role="img">
+<div class="scene-fallback">3D model loading…</div>
+</div>
+<div class="scene-legend"><span class="cyan">⌁ control pulse</span><span class="purple">◎ cooling stages</span><span class="pink">◆ qubit chip</span></div>
+</div>
+</div>
+<div class="core"><b>quantum ▸</b> prepare → control amplitudes and phase → create interference → measure classical bits.</div>
+</section><section aria-labelledby="compare-title" class="slide" data-name="compare" data-section="machines">
+<div class="slide-head">
+<div class="kicker"><span class="k-num">05</span> Side-by-side</div>
+<h2 class="slide-title" data-edit="" id="compare-title">Same word “computer,” different information</h2>
+</div>
+<div class="body compare-grid">
+<article class="compare-column classical-column">
+<div aria-hidden="true" class="compare-machine css-3d-classical">
+<div class="chip-3d"><i></i><i></i><i></i><i></i><span>CPU</span></div>
+<div class="binary-rain"><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span></div>
+</div>
+<h3>Classical computer</h3>
+<dl><div><dt>unit</dt><dd>bit: 0 or 1</dd></div><div><dt>operation</dt><dd>Boolean logic</dd></div><div><dt>read</dt><dd>non-destructive in the model</dd></div><div><dt>copy</dt><dd>bits can be freely copied</dd></div></dl>
+</article>
+<div class="versus"><span>≠</span><small>not faster<br/>at everything</small></div>
+<article class="compare-column quantum-column">
+<div aria-hidden="true" class="compare-machine css-3d-quantum"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="nucleus">ψ</div><i class="state-ray"></i></div>
+<h3>Quantum computer</h3>
+<dl><div><dt>unit</dt><dd>qubit: amplitudes + phase</dd></div><div><dt>operation</dt><dd>unitary rotations</dd></div><div><dt>read</dt><dd>measurement changes the state</dd></div><div><dt>copy</dt><dd>unknown states cannot be cloned</dd></div></dl>
+</article>
+</div>
+<div class="core"><b>key idea ▸</b> quantum advantage comes from engineered interference, not from reading every possibility at once.</div>
+</section><section aria-labelledby="bit-title" class="slide" data-name="bit" data-section="information">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">06</span> Information · classical</div>
+<h2 class="slide-title" data-edit="" id="bit-title">Meet the bit: one reliable choice</h2>
+</div>
+<div class="body bit-layout">
+<div class="bit-stage">
+<button aria-label="Toggle classical bit" aria-pressed="false" class="bit-switch" id="bitSwitch" type="button">
+<span class="switch-track"><i></i></span>
+<b id="bitValue">0</b>
+<small>click to flip</small>
+</button>
+<div aria-hidden="true" class="bit-cube-wrap"><div class="bit-cube state-0" id="bitCube"><span class="front">0</span><span class="back">1</span><span class="right"></span><span class="left"></span><span class="top"></span><span class="bottom"></span></div></div>
+</div>
+<div class="explain-stack">
+<div class="definition-line"><span>physical form</span><b>low/high voltage · magnetic direction · charge</b></div>
+<div class="definition-line"><span>logical meaning</span><b>two distinguishable states called 0 and 1</b></div>
+<div class="definition-line"><span>strength</span><b>stable, copyable, easy to error-correct</b></div>
+<div class="panel truth-panel"><div class="panel-head"><span><i class="status-dot"></i> NOT gate</span><span>truth table</span></div><div class="truth-row"><code>NOT 0 → 1</code><code>NOT 1 → 0</code></div></div>
+</div>
+</div>
+<div class="core"><b>bit ▸</b> the hardware may be analog, but the computer deliberately treats it as one of two robust logical states.</div>
+</section><section aria-labelledby="qubit-title" class="slide" data-name="qubit" data-section="information">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">07</span> Information · quantum</div>
+<h2 class="slide-title" data-edit="" id="qubit-title">A qubit stores a direction, not a hidden bit</h2>
+</div>
+<div class="body bloch-layout">
+<div class="panel bloch-panel">
+<div class="panel-head"><span><i class="status-dot"></i> bloch.sphere · 3D</span><span>drag to orbit</span></div>
+<div class="scene-host bloch-host" id="blochQubit"><div class="scene-fallback">3D Bloch sphere loading…</div></div>
+</div>
+<div class="qubit-copy">
+<div class="equation-card"><small>pure qubit state</small><div>|ψ⟩ = <b>α</b>|0⟩ + <em>β</em>|1⟩</div><p>|α|² + |β|² = 1</p></div>
+<div class="callout-line cyan-line"><b>amplitude</b><span>controls outcome probabilities</span></div>
+<div class="callout-line pink-line"><b>phase</b><span>controls how paths interfere</span></div>
+<div class="callout-line amber-line"><b>measurement</b><span>returns one classical outcome</span></div>
+<p class="plain-note">The sphere is a map of every pure one-qubit state. North is |0⟩, south is |1⟩, and the equator contains equal-probability states with different phases.</p>
+</div>
+</div>
+<div class="core"><b>important ▸</b> superposition is a coherent quantum state, not an ordinary 50/50 classical mixture.</div>
+</section><section class="advanced-slide slide" data-name="dirac-notation" data-section="information" data-title="Dirac Notation">
+<div class="eyebrow">Term 03 · Notation</div><h2>How to read quantum math without fearing it</h2>
+<div class="grid c3 mt2"><div class="card"><div class="formula">|0⟩</div><h3>Ket zero</h3><p>Column vector [1, 0]ᵀ.</p></div><div class="card"><div class="formula">|1⟩</div><h3>Ket one</h3><p>Column vector [0, 1]ᵀ.</p></div><div class="card"><div class="formula">|01⟩</div><h3>Two-qubit basis state</h3><p>A joint state of two qubits.</p></div></div>
+<div class="callout mt2"><b>Dirac / bra–ket notation</b> is simply a compact language for vectors and inner products used throughout quantum mechanics.</div>
+</section><section aria-labelledby="super-title" class="slide" data-name="superposition" data-section="information">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">08</span> Amplitude + phase</div>
+<h2 class="slide-title" data-edit="" id="super-title">Same probabilities, different futures</h2>
+</div>
+<div class="body super-layout">
+<div class="panel bloch-panel small-bloch">
+<div class="panel-head"><span><i class="status-dot"></i> phase.control</span><span id="phaseLabel">φ = 0°</span></div>
+<div class="scene-host bloch-host" id="blochSuper"><div class="scene-fallback">3D Bloch sphere loading…</div></div>
+<label class="phase-slider">phase <input id="phaseRange" max="360" min="0" step="1" type="range" value="0"/><output id="phaseOutput">0°</output></label>
+</div>
+<div class="phase-copy">
+<div class="state-comparison"><div><small>state A</small><b>|+⟩</b><code>(|0⟩ + |1⟩)/√2</code></div><div><small>state B</small><b>|−⟩</b><code>(|0⟩ − |1⟩)/√2</code></div></div>
+<div class="prob-strip"><span><i style="--p:50%"></i> P(0) = 50%</span><span><i style="--p:50%"></i> P(1) = 50%</span></div>
+<div class="phase-question"><span>Measure now</span><b>both look 50/50</b></div>
+<div class="phase-question"><span>Interfere first</span><b>phase changes the answer</b></div>
+<p class="plain-note">Probability alone does not describe a qubit. Algorithms arrange phases so unwanted paths cancel and useful paths reinforce.</p>
+</div>
+</div>
+<div class="core"><b>phase ▸</b> invisible in one direct measurement; visible after another gate converts phase into probability.</div>
+</section><section aria-labelledby="measure-title" class="slide" data-name="measurement" data-section="information">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">09</span> Asking the qubit</div>
+<h2 class="slide-title" data-edit="" id="measure-title">Measurement gives one answer, so we repeat</h2>
+</div>
+<div class="body measurement-layout">
+<div class="measure-machine">
+<div aria-hidden="true" class="measure-orbit"><span>α</span><span>β</span><i></i></div>
+<button class="action-btn primary" id="measureOnce" type="button">Measure once</button>
+<button class="action-btn" id="measureMany" type="button">Run 1,000 shots</button>
+<p aria-live="polite" id="measureResult">prepared state: |+⟩</p>
+</div>
+<div class="panel histogram-panel">
+<div class="panel-head"><span><i class="status-dot"></i> sampler.result</span><span id="shotCount">0 shots</span></div>
+<div aria-label="Measurement result histogram" class="histogram">
+<div class="hist-col"><span id="bar0Label">0</span><i id="bar0" style="--h:0%"></i><b>|0⟩</b></div>
+<div class="hist-col"><span id="bar1Label">0</span><i id="bar1" style="--h:0%"></i><b>|1⟩</b></div>
+</div>
+<p>Each shot returns one bit. Many shots estimate the probability distribution; they do not reveal α and β from a single copy.</p>
+</div>
+</div>
+<div class="core"><b>born rule ▸</b> P(0) = |α|² and P(1) = |β|². outcomes vary; the distribution is predictable.</div>
+</section><section aria-labelledby="pauli-title" class="slide" data-name="pauli-gates" data-section="gates">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">10</span> Gate lab · flips</div>
+<h2 class="slide-title" data-edit="" id="pauli-title">X, Y, Z: three half-turns</h2>
+</div>
+<div class="body gate-lab">
+<div class="panel gate-bloch-panel">
+<div class="panel-head"><span><i class="status-dot"></i> state.vector · 3D</span><span id="pauliState">|ψ⟩ = |0⟩</span></div>
+<div class="scene-host bloch-host" id="blochPauli"><div class="scene-fallback">3D Bloch sphere loading…</div></div>
+</div>
+<div class="gate-console">
+<div class="gate-buttons" data-target="pauli">
+<button class="gate-key active" data-gate="X" type="button"><b>X</b><span>bit flip</span></button>
+<button class="gate-key" data-gate="Y" type="button"><b>Y</b><span>bit + phase</span></button>
+<button class="gate-key" data-gate="Z" type="button"><b>Z</b><span>phase flip</span></button>
+<button class="gate-key prep" data-gate="PLUS" type="button"><b>+</b><span>prepare |+⟩</span></button>
+<button class="gate-key reset" data-gate="RESET" type="button"><b>↺</b><span>reset |0⟩</span></button>
+</div>
+<div class="panel gate-readout gate-readout-advanced">
+<div class="panel-head"><span><i class="status-dot"></i> gate.inspect</span><span id="pauliAxis">rotate π around X</span></div>
+<div class="gate-detail advanced"><div class="giant-gate" id="pauliGate">X</div><div><h3 id="pauliName">Pauli-X · bit flip</h3><p id="pauliExplain">Swaps |0⟩ and |1⟩. It is the closest quantum cousin of a classical NOT gate.</p><code id="pauliMatrix">[ 0  1 ]  [ 1  0 ]</code></div></div>
+<div class="gate-meaning-grid">
+<div><small>meaning</small><b id="pauliMeaning">Quantum NOT</b></div>
+<div><small>qiskit</small><code id="pauliQiskit">qc.x(0)</code></div>
+<div><small>use</small><span id="pauliUse">Flip a computational-basis state.</span></div>
+</div>
+<div class="gate-state-flow"><div><small>before</small><b id="pauliBefore">|0⟩</b></div><i>→</i><div class="gate-flow-op" id="pauliFlowGate">X</div><i>→</i><div><small>after</small><b id="pauliAfter">|1⟩</b></div><div class="gate-prob"><span>P(0) <b id="pauliP0">0%</b></span><span>P(1) <b id="pauliP1">100%</b></span></div></div>
+</div>
+<p class="tip" id="pauliTip">Try Z on |0⟩: the arrow does not move because global phase is unobservable. Prepare |+⟩, then try Z again.</p>
+</div>
+</div>
+<div class="core"><b>gate ▸</b> quantum gates are reversible transformations. on the Bloch sphere, single-qubit gates are rotations.</div>
+</section><section aria-labelledby="phase-gates-title" class="slide" data-name="phase-gates" data-section="gates">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">11</span> Gate lab · create + steer</div>
+<h2 class="slide-title" data-edit="" id="phase-gates-title">H, S, T: enter superposition and steer phase</h2>
+</div>
+<div class="body gate-lab">
+<div class="panel gate-bloch-panel">
+<div class="panel-head"><span><i class="status-dot"></i> state.vector · 3D</span><span id="phaseGateState">|ψ⟩ = |0⟩</span></div>
+<div class="scene-host bloch-host" id="blochPhase"><div class="scene-fallback">3D Bloch sphere loading…</div></div>
+</div>
+<div class="gate-console">
+<div class="gate-buttons" data-target="phase">
+<button class="gate-key active" data-gate="H" type="button"><b>H</b><span>Hadamard</span></button>
+<button class="gate-key" data-gate="S" type="button"><b>S</b><span>quarter phase</span></button>
+<button class="gate-key" data-gate="T" type="button"><b>T</b><span>eighth phase</span></button>
+<button class="gate-key" data-gate="RX" type="button"><b>Rₓ</b><span>tunable X</span></button>
+<button class="gate-key reset" data-gate="RESET" type="button"><b>↺</b><span>reset |0⟩</span></button>
+</div>
+<div class="panel gate-readout gate-readout-advanced">
+<div class="panel-head"><span><i class="status-dot"></i> gate.inspect</span><span id="phaseGateAxis">rotate π around X+Z</span></div>
+<div class="gate-detail advanced"><div class="giant-gate" id="phaseGate">H</div><div><h3 id="phaseGateName">Hadamard · path maker</h3><p id="phaseGateExplain">Maps |0⟩ to |+⟩ and |1⟩ to |−⟩. Apply it twice and you return to the starting state.</p><code id="phaseGateMatrix">1/√2 [ 1  1 ] [ 1 −1 ]</code></div></div>
+<div class="gate-meaning-grid">
+<div><small>meaning</small><b id="phaseGateMeaning">Superposition / basis change</b></div>
+<div><small>qiskit</small><code id="phaseGateQiskit">qc.h(0)</code></div>
+<div><small>use</small><span id="phaseGateUse">Create equal-amplitude paths and expose phase through interference.</span></div>
+</div>
+<div class="gate-state-flow"><div><small>before</small><b id="phaseGateBefore">|0⟩</b></div><i>→</i><div class="gate-flow-op" id="phaseGateFlowGate">H</div><i>→</i><div><small>after</small><b id="phaseGateAfter">|+⟩</b></div><div class="gate-prob"><span>P(0) <b id="phaseGateP0">50%</b></span><span>P(1) <b id="phaseGateP1">50%</b></span></div></div>
+</div>
+<p class="tip" id="phaseGateTip">S and T only become visually interesting away from the poles. Press H first, then S or T.</p>
+</div>
+</div>
+<div class="core"><b>toolkit ▸</b> H changes the measurement basis; S and T change relative phase. sequence creates computation.</div>
+</section><section aria-labelledby="cnot-title" class="slide" data-name="cnot" data-section="gates">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">12</span> Two-qubit gate</div>
+<h2 class="slide-title" data-edit="" id="cnot-title">CNOT: one qubit controls another</h2>
+</div>
+<div class="body cnot-layout">
+<div aria-label="Interactive CNOT gate model" class="cnot-stage">
+<div class="wire wire-control"><span>control</span><i id="controlBit">0</i><b></b></div>
+<div class="wire wire-target"><span>target</span><i id="targetBit">0</i><b></b></div>
+<div class="cnot-gate-3d"><span class="control-dot"></span><span class="connector"></span><span class="target-plus">＋</span></div>
+<div class="output-bits"><span id="cnotOutControl">0</span><span id="cnotOutTarget">0</span></div>
+<button id="toggleControl" type="button">toggle control</button>
+<button id="toggleTarget" type="button">toggle target</button>
+<button class="action-btn primary" id="runCnot" type="button">Run CNOT</button>
+</div>
+<div class="cnot-copy">
+<div class="rule-card"><small>meaning · Controlled-NOT</small><b>Control decides whether the target flips.</b><span>If control = 0 → target stays. If control = 1 → X is applied to the target.</span></div>
+<div class="cnot-meta"><div><small>Qiskit</small><code>qc.cx(0, 1)</code></div><div><small>why it matters</small><b>Correlation + entanglement</b></div></div>
+<div aria-label="CNOT truth table" class="truth-grid"><b>in</b><b>out</b><code>00</code><code>00</code><code>01</code><code>01</code><code>10</code><code>11</code><code>11</code><code>10</code></div>
+<div class="cnot-live"><small>live state</small><b id="cnotLiveInput">|00⟩</b><i>→ CX →</i><b id="cnotLiveOutput">|00⟩</b></div>
+<p class="plain-note">On basis states CNOT resembles conditional classical logic. If the control is in superposition, CNOT can create an entangled two-qubit state.</p>
+</div>
+</div>
+<div class="core"><b>notation ▸</b> first wire is control, second is target. always state ordering when comparing diagrams or code.</div>
+</section><section aria-labelledby="entangle-title" class="slide" data-name="entanglement" data-section="circuits">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">13</span> Shared state</div>
+<h2 class="slide-title" data-edit="" id="entangle-title">Entanglement: two qubits, one description</h2>
+</div>
+<div class="body entangle-layout">
+<div class="bell-visual">
+<div class="qubit-orb q-left"><span>q₀</span><i></i></div>
+<div class="entangle-link"><i></i><i></i><i></i></div>
+<div class="qubit-orb q-right"><span>q₁</span><i></i></div>
+<div class="bell-state">|Φ⁺⟩ = (|00⟩ + |11⟩) / √2</div>
+<button class="action-btn primary" id="runBell" type="button">Measure pair</button>
+<output id="bellOutcome">outcome waiting…</output>
+</div>
+<div class="entangle-copy">
+<div class="mini-circuit"><span>|0⟩</span><b class="gate-box">H</b><i></i><b class="ctrl">●</b><i></i><span>measure</span><span>|0⟩</span><i></i><b class="targ">⊕</b><i></i><span>measure</span></div>
+<div class="correlation-grid"><div><b>00</b><span>≈ 50%</span></div><div><b>11</b><span>≈ 50%</span></div><div class="muted"><b>01</b><span>0% ideal</span></div><div class="muted"><b>10</b><span>0% ideal</span></div></div>
+<p class="plain-note">The outcomes are random but correlated. Entanglement cannot send usable information faster than light; comparing results still requires ordinary communication.</p>
+</div>
+</div>
+<div class="core"><b>entangled ▸</b> the pair has a well-defined state even when neither qubit has its own independent pure state.</div>
+</section><section aria-labelledby="circuit-title" class="slide" data-name="circuit-model" data-section="circuits">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">14</span> Programming model</div>
+<h2 class="slide-title" data-edit="" id="circuit-title">A quantum program is a timed experiment</h2>
+</div>
+<div class="body circuit-layout">
+<div class="panel circuit-panel">
+<div class="panel-head"><span><i class="status-dot"></i> circuit.timeline</span><span>left → right</span></div>
+<svg aria-label="Two qubit Bell state circuit from preparation through gates to measurement" class="circuit-svg" role="img" viewbox="0 0 920 300">
+<defs><filter id="gateGlow"><fegaussianblur result="b" stddeviation="4"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs>
+<text x="22" y="90">q₀ |0⟩</text><text x="22" y="210">q₁ |0⟩</text>
+<line x1="120" x2="870" y1="82" y2="82"></line><line x1="120" x2="870" y1="202" y2="202"></line>
+<g class="c-stage active" data-cstage="prepare"><circle cx="150" cy="82" r="8"></circle><circle cx="150" cy="202" r="8"></circle><text x="150" y="270">prepare</text></g>
+<g class="c-stage" data-cstage="rotate"><rect height="58" rx="4" width="58" x="275" y="53"></rect><text x="304" y="89">H</text><text x="304" y="270">rotate</text></g>
+<g class="c-stage" data-cstage="entangle"><circle cx="480" cy="82" r="8"></circle><line x1="480" x2="480" y1="90" y2="184"></line><circle cx="480" cy="202" r="22"></circle><line x1="466" x2="494" y1="202" y2="202"></line><line x1="480" x2="480" y1="188" y2="216"></line><text x="480" y="270">entangle</text></g>
+<g class="c-stage" data-cstage="measure"><path d="M650 105v-46h54v46M660 92a17 17 0 0134 0M677 92l12-16"></path><path d="M650 225v-46h54v46M660 212a17 17 0 0134 0M677 212l12-16"></path><text x="677" y="270">measure</text></g>
+<g class="c-stage" data-cstage="repeat"><path d="M790 70h54v24h-54zM790 190h54v24h-54z"></path><text x="817" y="87">0/1</text><text x="817" y="207">0/1</text><text x="817" y="270">repeat</text></g>
+</svg>
+</div>
+<div class="circuit-steps">
+<button class="circuit-step active" data-cstage="prepare" type="button"><b>01</b><span>prepare a known state</span></button>
+<button class="circuit-step" data-cstage="rotate" type="button"><b>02</b><span>apply calibrated gates</span></button>
+<button class="circuit-step" data-cstage="entangle" type="button"><b>03</b><span>connect qubit paths</span></button>
+<button class="circuit-step" data-cstage="measure" type="button"><b>04</b><span>convert quantum → classical</span></button>
+<button class="circuit-step" data-cstage="repeat" type="button"><b>05</b><span>repeat to estimate</span></button>
+</div>
+</div>
+<div class="core"><b>circuit ▸</b> we never inspect amplitudes mid-flight; we design gates so measurements reveal the property we need.</div>
+</section><section aria-labelledby="interference-title" class="slide" data-name="interference" data-section="circuits">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">15</span> The computational engine</div>
+<h2 class="slide-title" data-edit="" id="interference-title">Interference turns phase into an answer</h2>
+</div>
+<div class="body interference-layout">
+<div class="panel wave-panel">
+<div class="panel-head"><span><i class="status-dot"></i> amplitude.paths</span><span id="interferenceMode">constructive</span></div>
+<canvas aria-label="Animated constructive and destructive wave interference" height="390" id="waveCanvas" width="760"></canvas>
+<div class="wave-controls"><button class="wave-mode active" data-mode="constructive" type="button">reinforce</button><button class="wave-mode" data-mode="destructive" type="button">cancel</button><button class="wave-mode" data-mode="algorithm" type="button">amplify answer</button></div>
+</div>
+<div class="interference-copy">
+<div class="amplitude-rule positive"><span>same phase</span><b>amplitudes add</b><small>more likely after measurement</small></div>
+<div class="amplitude-rule negative"><span>opposite phase</span><b>amplitudes cancel</b><small>less likely after measurement</small></div>
+<p class="plain-note">A quantum algorithm is choreography: split computational paths, change their phases, then recombine them so useful outcomes become easier to observe.</p>
+</div>
+</div>
+<div class="core"><b>not magic ▸</b> superposition creates paths; interference decides which paths survive into measurable probability.</div>
+</section><section class="advanced-slide slide" data-name="execution-workflow" data-section="practice" data-title="Inside the Quantum Workflow">
+<div class="eyebrow">Term 07 · Execution Model</div><h2>What happens when a Qiskit circuit <span class="gradient">runs?</span></h2>
+<div class="flow mt2"><span class="node">QuantumCircuit</span><span class="arrow">→</span><span class="node">transpile()</span><span class="arrow">→</span><span class="node">AerSimulator</span><span class="arrow">→</span><span class="node">job</span><span class="arrow">→</span><span class="node">result</span><span class="arrow">→</span><span class="node">counts</span></div>
+<div class="grid c3 mt2"><div class="term"><b>QuantumCircuit</b><span>Ordered quantum + classical instructions.</span></div><div class="term"><b>Transpilation</b><span>Rewrites a circuit for a backend's supported operations/constraints.</span></div><div class="term"><b>Backend</b><span>Execution target — simulator or hardware.</span></div><div class="term"><b>Job</b><span>Submitted execution request.</span></div><div class="term"><b>Result</b><span>Object containing execution data.</span></div><div class="term"><b>Counts</b><span>Measured bitstring frequencies.</span></div></div>
+</section><section class="advanced-slide slide" data-name="aer-simulator" data-section="practice" data-title="AerSimulator">
+<div class="part"><b>Part II</b> · Qiskit Aer</div><h2 class="mt">AerSimulator: our local <span class="gradient">quantum laboratory</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>core_pattern.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+simulator = AerSimulator()
+
+compiled = transpile(circuit, simulator)
+job = simulator.run(compiled, shots=<span class="num">1024</span>)
+result = job.result()
+counts = result.get_counts()</pre></div><div><div class="grid"><div class="term"><b>Simulator</b><span>Classical software that numerically reproduces quantum-circuit behavior.</span></div><div class="term"><b>Aer</b><span>Qiskit's high-performance circuit-simulation package.</span></div><div class="term"><b>shots=1024</b><span>Sample the measured circuit 1,024 times.</span></div></div><div class="warning callout mt"><b>Reality check:</b> Aer executes on classical hardware. It models quantum behavior; it is not itself a QPU.</div></div></div>
+<div class="source">Qiskit ecosystem documentation describes Aer as high-performance simulators for Qiskit.</div>
+</section><section class="advanced-slide slide" data-name="x-lab" data-section="labs" data-title="X Gate Lab">
+<div class="labtag">Lab 1 · Predict → Build → Run</div><h2>X gate: the quantum <span class="gradient">NOT</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>x_gate.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+qc = QuantumCircuit(<span class="num">1</span>, <span class="num">1</span>)
+qc.x(<span class="num">0</span>)
+qc.measure(<span class="num">0</span>, <span class="num">0</span>)
+
+sim = AerSimulator()
+result = sim.run(transpile(qc, sim), shots=<span class="num">100</span>).result()
+<span class="fn">print</span>(result.get_counts())</pre></div><div><div class="circuit">q₀: |0⟩ ──[ X ]──[M]──
+                    ║
+c₀: 0 ══════════════╩═</div><div class="card mt"><h3>Prediction</h3><div class="formula">{'1': 100}</div><p class="mt">X maps |0⟩ exactly to |1⟩.</p></div></div></div>
+</section><section class="advanced-slide slide" data-name="h-lab" data-section="labs" data-title="H Gate Lab">
+<div class="labtag">Lab 2 · Superposition</div><h2>H gate: one state becomes a <span class="gradient">50/50 measurement</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>hadamard.py</span><button class="copy">Copy</button></div><pre>qc = QuantumCircuit(<span class="num">1</span>, <span class="num">1</span>)
+qc.h(<span class="num">0</span>)
+qc.measure(<span class="num">0</span>, <span class="num">0</span>)
+
+sim = AerSimulator()
+result = sim.run(
+    transpile(qc, sim),
+    shots=<span class="num">1000</span>
+).result()
+
+counts = result.get_counts()
+<span class="fn">print</span>(counts)</pre></div><div><div class="hist"><div class="hrow"><b>0</b><div class="track"><div class="barv" style="width:49.4%"></div></div><span>≈ 49%</span></div><div class="hrow"><b>1</b><div class="track"><div class="barv" style="width:50.6%"></div></div><span>≈ 51%</span></div></div><div class="formula mt2">|+⟩ = (|0⟩+|1⟩)/√2</div><div class="checkpoint mt">✓ You created superposition</div></div></div>
+</section><section class="advanced-slide slide" data-name="histogram" data-section="labs" data-title="Visualize Counts">
+<div class="eyebrow">Tooling</div><h2>Turn counts into a <span class="gradient">histogram</span></h2>
+<div class="grid c2 mt vcenter"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>visualize.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit.visualization <span class="kw">import</span> plot_histogram
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+plot_histogram(
+    counts,
+    title=<span class="st">"H gate measurement"</span>
+)
+plt.show()</pre></div><div class="card"><h3>Why visualize?</h3><div class="list"><div class="li"><i class="bullet"></i>Humans notice distributions faster than dictionaries.</div><div class="li"><i class="bullet"></i>Entanglement and Grover become visually obvious.</div><div class="li"><i class="bullet"></i>Ideal for experiment comparisons.</div></div></div></div>
+</section><section class="advanced-slide slide" data-name="phase-interference-lab" data-section="labs" data-title="Z Gate and Interference">
+<div class="labtag">Lab 3 · Phase → Interference</div><h2>Z does “nothing” to probabilities — until <span class="gradient">H reveals the phase</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>phase_interference.py</span><button class="copy">Copy</button></div><pre>qc = QuantumCircuit(<span class="num">1</span>, <span class="num">1</span>)
+qc.h(<span class="num">0</span>)   <span class="cm"># |0&gt; -&gt; |+&gt;</span>
+qc.z(<span class="num">0</span>)   <span class="cm"># |+&gt; -&gt; |-&gt;</span>
+qc.h(<span class="num">0</span>)   <span class="cm"># |-&gt; -&gt; |1&gt;</span>
+qc.measure(<span class="num">0</span>, <span class="num">0</span>)
+
+sim = AerSimulator()
+counts = sim.run(
+    transpile(qc, sim), shots=<span class="num">100</span>
+).result().get_counts()
+
+<span class="fn">print</span>(counts)  <span class="cm"># {'1': 100}</span></pre></div><div><div class="flow"><span class="node">|0⟩</span><span class="arrow">H</span><span class="node">|+⟩</span><span class="arrow">Z</span><span class="node">|−⟩</span><span class="arrow">H</span><span class="node">|1⟩</span></div><div class="callout mt2"><b>Interference:</b> amplitudes can reinforce or cancel when quantum paths recombine.</div></div></div>
+</section><section class="advanced-slide slide" data-name="statevector" data-section="labs" data-title="Statevector">
+<div class="eyebrow">Term 09 · State Inspection</div><h2>Statevector = the complete amplitude description</h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>statevector.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+qc = QuantumCircuit(<span class="num">1</span>)
+qc.h(<span class="num">0</span>)
+qc.save_statevector()
+
+sim = AerSimulator(method=<span class="st">"statevector"</span>)
+result = sim.run(transpile(qc, sim)).result()
+psi = result.get_statevector()
+
+<span class="fn">print</span>(psi)</pre></div><div><div class="formula">[0.7071+0j, 0.7071+0j]</div><div class="grid mt"><div class="term"><b>Statevector</b><span>2ⁿ complex amplitudes for an n-qubit pure state.</span></div><div class="term"><b>save_statevector()</b><span>Instruction asking Aer to store the simulated state.</span></div></div><div class="danger callout mt"><b>Scaling:</b> statevector memory grows exponentially: 2ⁿ amplitudes.</div></div></div>
+</section><section class="advanced-slide slide" data-name="two-qubits" data-section="labs" data-title="Two Qubits">
+<div class="eyebrow">Term 10</div><h2>Two qubits create a <span class="gradient">4-state basis</span></h2>
+<div class="grid c2 mt2 vcenter"><div><div class="formula">|ψ⟩ = a|00⟩+b|01⟩+c|10⟩+d|11⟩</div><div class="callout mt2"><b>Dimension rule:</b> n qubits → 2ⁿ basis states.</div></div><div class="grid c2"><div class="card center"><div class="formula">|00⟩</div></div><div class="card center"><div class="formula">|01⟩</div></div><div class="card center"><div class="formula">|10⟩</div></div><div class="card center"><div class="formula">|11⟩</div></div></div></div>
+</section><section class="advanced-slide slide" data-name="bell-lab" data-section="labs" data-title="Bell Pair Lab">
+<div class="labtag">Lab 4 · Bell Pair</div><h2>Build entanglement with exactly <span class="gradient">two gates</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>bell.py</span><button class="copy">Copy</button></div><pre>qc = QuantumCircuit(<span class="num">2</span>, <span class="num">2</span>)
+qc.h(<span class="num">0</span>)
+qc.cx(<span class="num">0</span>, <span class="num">1</span>)
+qc.measure([<span class="num">0</span>, <span class="num">1</span>], [<span class="num">0</span>, <span class="num">1</span>])
+
+sim = AerSimulator()
+counts = sim.run(
+    transpile(qc, sim), shots=<span class="num">1000</span>
+).result().get_counts()
+
+<span class="fn">print</span>(counts)</pre></div><div><div class="circuit">q₀: |0⟩ ──[H]──●──[M]──
+               │
+q₁: |0⟩ ───────⊕──[M]──</div><div class="hist mt"><div class="hrow"><b>00</b><div class="track"><div class="barv" style="width:49%"></div></div><span>≈ 50%</span></div><div class="hrow"><b>11</b><div class="track"><div class="barv" style="width:51%"></div></div><span>≈ 50%</span></div><div class="hrow"><b>01</b><div class="track"></div><span>0%</span></div><div class="hrow"><b>10</b><div class="track"></div><span>0%</span></div></div></div></div>
+</section><section class="advanced-slide slide" data-name="bit-ordering" data-section="labs" data-title="Bit Ordering">
+<div class="eyebrow">Common Pitfall</div><h2>Qiskit bitstrings can look <span class="gradient">backwards</span></h2>
+<div class="grid c2 mt2"><div class="card"><h3>Circuit mapping</h3><div class="formula">q₀ → c₀<br/>q₁ → c₁</div></div><div class="card"><h3>Displayed key</h3><div class="formula">c₁c₀</div><p class="mt">A counts key such as <b>"10"</b> is written with the higher-index classical bit on the left.</p></div></div>
+<div class="warning callout mt2"><b>Workshop rule:</b> always label the meaning of each bit before interpreting Grover or multi-qubit results.</div>
+</section><section class="advanced-slide slide" data-name="grover-concept" data-section="algorithms" data-title="Grover Algorithm">
+<div class="eyebrow">Algorithm 01</div><h2>Grover search: amplify a <span class="gradient">marked state</span></h2>
+<div class="grid c2 mt2 vcenter"><div><div class="formula">Classical: O(N)</div><div class="formula mt">Grover: O(√N)</div><p class="mt">For a 2-qubit search space, N = 4 possible basis states.</p></div><div class="flow"><span class="node">H⊗H</span><span class="arrow">→</span><span class="node">Oracle</span><span class="arrow">→</span><span class="node">Diffusion</span><span class="arrow">→</span><span class="node">Measure</span></div></div>
+<div class="grid c2 mt2"><div class="term"><b>Oracle</b><span>Marks the desired state by changing its phase.</span></div><div class="term"><b>Diffusion operator</b><span>Reflects amplitudes about their average, amplifying the marked state.</span></div></div>
+</section><section class="advanced-slide slide" data-name="grover-oracle" data-section="algorithms" data-title="Grover Oracle">
+<div class="eyebrow">Grover · Step 1</div><h2>Oracle: mark |11⟩ with a <span class="gradient">phase flip</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>grover_oracle.py</span><button class="copy">Copy</button></div><pre>qc = QuantumCircuit(<span class="num">2</span>, <span class="num">2</span>)
+
+<span class="cm"># Equal superposition of 00,01,10,11</span>
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+
+<span class="cm"># Oracle: CZ adds a - sign to |11&gt;</span>
+qc.cz(<span class="num">0</span>, <span class="num">1</span>)</pre></div><div><div class="formula">before: + + + +</div><div class="formula mt">after:   + + + <span class="hot">−</span></div><div class="warning callout mt2">The oracle changes <b>phase</b>, not the immediate measurement probabilities.</div></div></div>
+</section><section class="advanced-slide slide" data-name="grover-diffusion" data-section="algorithms" data-title="Grover Diffusion">
+<div class="eyebrow">Grover · Step 2</div><h2>Diffusion: turn the phase mark into <span class="gradient">probability</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>grover_diffusion.py</span><button class="copy">Copy</button></div><pre><span class="cm"># Diffusion operator for 2 qubits</span>
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+qc.x([<span class="num">0</span>, <span class="num">1</span>])
+qc.cz(<span class="num">0</span>, <span class="num">1</span>)
+qc.x([<span class="num">0</span>, <span class="num">1</span>])
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+
+qc.measure([<span class="num">0</span>, <span class="num">1</span>], [<span class="num">0</span>, <span class="num">1</span>])</pre></div><div><div class="card glow"><h3>Geometric intuition</h3><p>The diffuser reflects amplitudes around their average. After one oracle + diffusion step for N=4, the marked state's amplitude becomes dominant.</p></div></div></div>
+</section><section class="advanced-slide slide" data-name="grover-complete" data-section="algorithms" data-title="Complete Grover Lab">
+<div class="labtag">Lab 5 · Complete Grover Search</div><h2>Put it together: <span class="gradient">find |11⟩</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>grover_2q.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+qc = QuantumCircuit(<span class="num">2</span>, <span class="num">2</span>)
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+qc.cz(<span class="num">0</span>, <span class="num">1</span>)       <span class="cm"># oracle |11&gt;</span>
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+qc.x([<span class="num">0</span>, <span class="num">1</span>])
+qc.cz(<span class="num">0</span>, <span class="num">1</span>)
+qc.x([<span class="num">0</span>, <span class="num">1</span>])
+qc.h([<span class="num">0</span>, <span class="num">1</span>])
+qc.measure([<span class="num">0</span>,<span class="num">1</span>],[<span class="num">0</span>,<span class="num">1</span>])
+
+sim = AerSimulator()
+counts = sim.run(transpile(qc, sim), shots=<span class="num">1000</span>).result().get_counts()
+<span class="fn">print</span>(counts)</pre></div><div><div class="hist"><div class="hrow"><b>11</b><div class="track"><div class="barv" style="width:99.7%"></div></div><span>≈100%</span></div><div class="hrow"><b>00</b><div class="track"><div class="barv" style="width:.1%"></div></div><span>≈0%</span></div><div class="hrow"><b>01</b><div class="track"><div class="barv" style="width:.1%"></div></div><span>≈0%</span></div><div class="hrow"><b>10</b><div class="track"><div class="barv" style="width:.1%"></div></div><span>≈0%</span></div></div><div class="checkpoint mt">✓ First quantum search algorithm</div></div></div>
+</section><section class="advanced-slide slide" data-name="shor-glimpse" data-section="algorithms" data-title="Shor in One Slide">
+<div class="eyebrow">Algorithm Glimpse</div><h2>Shor's algorithm: why cryptographers care</h2>
+<div class="grid c3 mt2"><div class="card"><h3>Problem</h3><p>Integer factorization and discrete-log style problems underpin important public-key systems.</p></div><div class="card"><h3>Quantum Idea</h3><p>Use quantum period finding as a key subroutine.</p></div><div class="card"><h3>Reality</h3><p>Large cryptographically relevant attacks require fault-tolerant quantum computers far beyond today's small workshop simulations.</p></div></div>
+<div class="callout mt2"><b>Takeaway:</b> Grover shows amplitude amplification; Shor shows a fundamentally different algorithmic structure based on periodicity.</div>
+</section><section class="advanced-slide slide" data-name="qrng-concept" data-section="capstone" data-title="QRNG Concept">
+<div class="part"><b>Part V</b> · Capstone</div><h2 class="mt">Capstone: a quantum-circuit <span class="gradient">random bit generator</span></h2>
+<div class="flow mt2"><span class="node">|0⟩</span><span class="arrow">→</span><span class="node">H</span><span class="arrow">→</span><span class="node">(|0⟩+|1⟩)/√2</span><span class="arrow">→</span><span class="node">Measure</span><span class="arrow">→</span><span class="node">0 / 1</span></div>
+<div class="grid c2 mt2"><div class="card glow"><h3>On real quantum hardware</h3><p>Measurement can provide physical quantum randomness, subject to device noise, bias and extraction considerations.</p></div><div class="card"><h3>On Aer in this workshop</h3><p>We simulate those measurement statistics on a classical computer. Excellent for learning and circuit development.</p></div></div>
+</section><section class="advanced-slide slide" data-name="qrng-bit" data-section="capstone" data-title="Random Bit Code">
+<div class="labtag">Lab 6A · Random Bit</div><h2>One H gate. One measurement. <span class="gradient">One bit.</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>random_bit.py</span><button class="copy">Copy</button></div><pre><span class="kw">from</span> qiskit <span class="kw">import</span> QuantumCircuit, transpile
+<span class="kw">from</span> qiskit_aer <span class="kw">import</span> AerSimulator
+
+<span class="kw">def</span> <span class="fn">random_bit</span>():
+    qc = QuantumCircuit(<span class="num">1</span>, <span class="num">1</span>)
+    qc.h(<span class="num">0</span>)
+    qc.measure(<span class="num">0</span>, <span class="num">0</span>)
+
+    sim = AerSimulator()
+    result = sim.run(
+        transpile(qc, sim), shots=<span class="num">1</span>
+    ).result()
+
+    counts = result.get_counts()
+    <span class="kw">return</span> <span class="fn">next</span>(<span class="fn">iter</span>(counts))
+
+<span class="fn">print</span>(random_bit())</pre></div><div><div class="mission">0 <span class="gradient">or</span> 1</div><p class="lead">Each call samples the circuit once.</p><div class="warning callout mt"><b>Security note:</b> Aer simulation is not a drop-in cryptographic entropy source.</div></div></div>
+</section><section class="advanced-slide slide" data-name="qrng-string" data-section="capstone" data-title="Random String Code">
+<div class="labtag">Lab 6B · Random Bit String</div><h2>Extend one random bit into a <span class="gradient">random string</span></h2>
+<div class="grid c2 mt"><div class="codewrap"><div class="codehead"><div class="dots"><i></i><i></i><i></i></div><span>random_bits.py</span><button class="copy">Copy</button></div><pre><span class="kw">def</span> <span class="fn">random_bits</span>(n=<span class="num">16</span>):
+    <span class="kw">return</span> <span class="st">""</span>.join(
+        random_bit() <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n)
+    )
+
+bits = random_bits(<span class="num">16</span>)
+<span class="fn">print</span>(bits)
+<span class="cm"># Example: 1010110010011101</span></pre></div><div class="card"><h3>Challenge extensions</h3><div class="list"><div class="li"><i class="bullet"></i>Convert the bitstring to an integer.</div><div class="li"><i class="bullet"></i>Generate 10,000 bits and estimate 0/1 frequency.</div><div class="li"><i class="bullet"></i>Compare with Python's <code>random</code> for learning.</div><div class="li"><i class="bullet"></i>Optional: later run equivalent circuits on a real QPU.</div></div></div></div>
+</section><section aria-labelledby="noise-title" class="slide" data-name="noise" data-section="reality">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">17</span> Reality enters</div>
+<h2 class="slide-title" data-edit="" id="noise-title">Real qubits forget, drift, and misread</h2>
+</div>
+<div class="body noise-layout">
+<div aria-hidden="true" class="noise-scope"><div class="noise-orbit"><i></i></div><div class="ideal-vector"></div><div class="noisy-vector"></div><span>ideal</span><span>actual</span></div>
+<div class="noise-list">
+<article style="--tone:var(--cyan)"><b>T₁</b><h3>relaxation</h3><p>|1⟩ loses energy toward |0⟩.</p></article>
+<article style="--tone:var(--purple)"><b>T₂</b><h3>dephasing</h3><p>relative phase becomes uncertain.</p></article>
+<article style="--tone:var(--pink)"><b>↯</b><h3>gate error</h3><p>the requested rotation is imperfect.</p></article>
+<article style="--tone:var(--amber)"><b>?</b><h3>readout error</h3><p>the device reports the wrong bit.</p></article>
+</div>
+<div class="reality-layers"><span><b>suppress</b> design better circuits</span><span><b>mitigate</b> estimate cleaner results</span><span><b>correct</b> encode logical qubits</span></div>
+</div>
+<div class="core"><b>honesty ▸</b> a noisy simulator is an approximation; a hardware result belongs to a named device and calibration moment.</div>
+</section><section aria-labelledby="apps-title" class="slide" data-name="applications" data-section="reality">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">18</span> Where the model fits</div>
+<h2 class="slide-title" data-edit="" id="apps-title">Quantum computers target particular structures</h2>
+</div>
+<div class="body app-map">
+<div class="app-core"><span>QPU</span><small>specialized accelerator</small></div>
+<article class="app-node n1"><b>01</b><h3>quantum simulation</h3><p>molecules, materials, dynamics</p><span>nature is already quantum</span></article>
+<article class="app-node n2"><b>02</b><h3>cryptanalysis</h3><p>factoring with fault tolerance</p><span>Shor · future-scale requirement</span></article>
+<article class="app-node n3"><b>03</b><h3>search primitives</h3><p>quadratic query improvement</p><span>Grover · oracle assumptions</span></article>
+<article class="app-node n4"><b>04</b><h3>optimization + ML</h3><p>active research, hybrid workflows</p><span>benchmark classical baselines</span></article>
+<svg aria-hidden="true" class="app-links" viewbox="0 0 1000 500"><path d="M500 250L250 115M500 250L750 115M500 250L250 390M500 250L750 390"></path></svg>
+</div>
+<div class="core"><b>fit ▸</b> ask “what structure can interference exploit?” before asking “can quantum make this faster?”</div>
+</section><section aria-labelledby="myths-title" class="slide" data-name="myths" data-section="reality">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">19</span> Keep the model honest</div>
+<h2 class="slide-title" data-edit="" id="myths-title">Four myths to leave behind</h2>
+</div>
+<div class="body myth-grid">
+<article><span>myth 01</span><h3>“It tries every answer and reads them all.”</h3><p>Measurement returns limited classical information. Algorithms use interference to bias useful outcomes.</p></article>
+<article><span>myth 02</span><h3>“Entanglement sends messages instantly.”</h3><p>Correlations can be nonclassical, but usable communication still respects ordinary causal limits.</p></article>
+<article><span>myth 03</span><h3>“More qubits always means a better computer.”</h3><p>Connectivity, fidelity, gate speed, measurement, and logical performance all matter.</p></article>
+<article><span>myth 04</span><h3>“Quantum replaces classical.”</h3><p>Useful workflows are hybrid: classical systems prepare, control, optimize, verify, and interpret.</p></article>
+</div>
+<div class="core"><b>rule ▸</b> separate theorem, exact simulation, noisy model, hardware evidence, and forecast.</div>
+</section><section class="advanced-slide slide" data-name="simulator-vs-hardware" data-section="reality" data-title="Simulator vs Hardware">
+<div class="eyebrow">Engineering Reality</div><h2>Aer simulator vs real quantum <span class="gradient">hardware</span></h2>
+<table class="compare mt"><thead><tr><th>Dimension</th><th>Aer Simulator</th><th>Real QPU</th></tr></thead><tbody><tr><td>Execution</td><td>Classical CPU/GPU simulation</td><td>Physical qubits</td></tr><tr><td>Noise</td><td>Ideal by default; noise can be modeled</td><td>Physical noise is unavoidable</td></tr><tr><td>Access</td><td>Local, fast for small circuits</td><td>Cloud/service access, scheduling constraints</td></tr><tr><td>Statevector</td><td>Can inspect full simulated state</td><td>Cannot directly read an unknown statevector</td></tr><tr><td>Best use</td><td>Learning, debugging, testing</td><td>Physical experiments and hardware behavior</td></tr></tbody></table>
+</section><section class="advanced-slide slide" data-name="debugging" data-section="close" data-title="Debugging Checklist">
+<div class="eyebrow">Workshop Survival Guide</div><h2>When the circuit does not behave as expected</h2>
+<div class="grid c2 mt2"><div class="card"><h3>Code checks</h3><div class="list"><div class="li"><i class="bullet"></i>Is the virtual environment active?</div><div class="li"><i class="bullet"></i>Does <code>import qiskit_aer</code> work?</div><div class="li"><i class="bullet"></i>Did you allocate enough classical bits?</div><div class="li"><i class="bullet"></i>Did you measure before asking for counts?</div></div></div><div class="card"><h3>Quantum checks</h3><div class="list"><div class="li"><i class="bullet"></i>What is the state before measurement?</div><div class="li"><i class="bullet"></i>Are you confusing amplitudes with probabilities?</div><div class="li"><i class="bullet"></i>Did a Z gate change phase rather than probability?</div><div class="li"><i class="bullet"></i>Are you reading Qiskit's bit order correctly?</div></div></div></div>
+</section><section class="advanced-slide slide" data-name="knowledge-check" data-section="close" data-title="Knowledge Check">
+<div class="eyebrow">Checkpoint</div><h2>Can you answer these without looking back?</h2>
+<div class="grid c2 mt2"><div class="card"><h3>1.</h3><p>What is the difference between an amplitude and a probability?</p></div><div class="card"><h3>2.</h3><p>Why can Z matter even if Z-basis probabilities do not change immediately?</p></div><div class="card"><h3>3.</h3><p>What do <code>shots</code> mean in Aer?</p></div><div class="card"><h3>4.</h3><p>Which two gates create the standard Bell pair from |00⟩?</p></div><div class="card"><h3>5.</h3><p>What does the Grover oracle do?</p></div><div class="card"><h3>6.</h3><p>Why is an Aer-generated sample not the same as physical quantum entropy?</p></div></div>
+</section><section class="advanced-slide slide" data-name="glossary" data-section="close" data-title="Glossary">
+<div class="eyebrow">Reference · Glossary</div><h2>Quantum vocabulary you should leave knowing</h2>
+<div class="grid c4 mt" style="gap:11px">
+<div class="term"><b>Qubit</b><span>Quantum information unit.</span></div><div class="term"><b>Basis state</b><span>|0⟩, |1⟩, etc.</span></div><div class="term"><b>Amplitude</b><span>Complex state coefficient.</span></div><div class="term"><b>Probability</b><span>|amplitude|².</span></div><div class="term"><b>Superposition</b><span>State with multiple basis amplitudes.</span></div><div class="term"><b>Phase</b><span>Complex-angle information in amplitudes.</span></div><div class="term"><b>Interference</b><span>Amplitude reinforcement/cancellation.</span></div><div class="term"><b>Entanglement</b><span>Non-separable joint quantum state.</span></div><div class="term"><b>Gate</b><span>Unitary state transformation.</span></div><div class="term"><b>Circuit</b><span>Ordered quantum/classical operations.</span></div><div class="term"><b>Measurement</b><span>Quantum-to-classical sampling.</span></div><div class="term"><b>Shot</b><span>One circuit sample/execution.</span></div><div class="term"><b>Backend</b><span>Target that executes a circuit.</span></div><div class="term"><b>Transpile</b><span>Rewrite/optimize circuit for target.</span></div><div class="term"><b>Statevector</b><span>All amplitudes of a pure state.</span></div><div class="term"><b>Oracle</b><span>Algorithm component marking desired structure.</span></div>
+</div>
+</section><section class="advanced-slide slide" data-name="next-steps" data-section="close" data-title="What Next?">
+<div class="eyebrow">Epilogue</div><h2>Your quantum journey continues from <span class="gradient">here</span></h2>
+<div class="grid c3 mt2"><div class="card"><h3>Level 1 · Master circuits</h3><p>Rebuild X, H, Z, Bell and Grover from memory.</p></div><div class="card"><h3>Level 2 · Explore simulation</h3><p>Statevectors, noise models, larger circuits, algorithm experiments.</p></div><div class="card"><h3>Level 3 · Touch hardware</h3><p>Learn transpilation, device constraints, errors and real QPU workflows.</p></div></div>
+<div class="callout mt2"><b>Recommended official path:</b> IBM Quantum Learning + current Qiskit documentation + Qiskit ecosystem resources.</div>
+</section><section class="advanced-slide slide" data-name="final-challenge" data-section="close" data-title="Final Challenge">
+<div class="labtag">Team Challenge · 10 minutes</div><h2>Build without copying: <span class="gradient">Bell + Histogram</span></h2>
+<div class="grid c2 mt2"><div><div class="mission">Your mission</div><div class="list mt"><div class="li"><i class="bullet"></i>Create a 2-qubit, 2-classical-bit circuit.</div><div class="li"><i class="bullet"></i>Prepare a Bell state.</div><div class="li"><i class="bullet"></i>Run 2,000 Aer shots.</div><div class="li"><i class="bullet"></i>Plot the histogram.</div><div class="li"><i class="bullet"></i>Explain why 01 and 10 disappear in the ideal simulation.</div></div></div><div class="card glow center"><div><div class="formula">Expected:</div><div class="formula mt">00 ≈ 50%</div><div class="formula">11 ≈ 50%</div></div></div></div>
+</section><section aria-labelledby="mental-title" class="slide" data-name="mental-model" data-section="close">
+<div class="slide-head compact-head">
+<div class="kicker"><span class="k-num">20</span> The whole picture</div>
+<h2 class="slide-title" data-edit="" id="mental-title">If you remember one loop</h2>
+</div>
+<div class="body final-model">
+<div class="model-track">
+<article style="--tone:var(--cyan)"><b>1</b><span>prepare</span><small>known qubits</small></article><i>→</i>
+<article style="--tone:var(--purple)"><b>2</b><span>transform</span><small>reversible gates</small></article><i>→</i>
+<article style="--tone:var(--pink)"><b>3</b><span>entangle</span><small>shared state</small></article><i>→</i>
+<article style="--tone:var(--amber)"><b>4</b><span>interfere</span><small>shape amplitudes</small></article><i>→</i>
+<article style="--tone:var(--cyan)"><b>5</b><span>measure</span><small>classical bits</small></article>
+</div>
+<div class="model-bottom">
+<div><small>quantum program</small><b>gates choreograph probability</b></div>
+<div><small>quantum computer</small><b>classical control + physical qubits</b></div>
+<div><small>quantum advantage</small><b>problem-specific, evidence required</b></div>
+</div>
+</div>
+<div class="core"><b>one sentence ▸</b> a quantum computer controls amplitudes and phase so interference makes useful measurements more likely.</div>
+</section><section aria-labelledby="closing-title" class="slide closing-slide" data-name="sources-qa" data-section="close">
+<div class="body closing-layout">
+<div class="closing-copy">
+<div class="kicker"><span class="k-num">21</span> Continue the experiment</div>
+<h1 class="closing-title" data-edit="" id="closing-title">BUILD. <span class="hollow">SIMULATE.</span><br/>QUESTION. REPEAT.</h1>
+<p>You now have the mental model and Aer workflow to keep experimenting beyond this room.</p>
+<div class="shortcut-chips"><span>O · overview</span><span>F · fullscreen</span><span>E · edit text</span><span>← → · navigate</span></div>
+</div>
+<div class="panel source-panel">
+<div class="panel-head"><span><i class="status-dot"></i> trusted.next_steps</span><span>sources</span></div>
+<a href="https://quantum.cloud.ibm.com/learning/en/courses" rel="noopener" target="_blank"><b>IBM Quantum Learning</b><span>foundations · algorithms · error correction</span></a>
+<a href="https://quantum.cloud.ibm.com/docs/en/api/qiskit/index" rel="noopener" target="_blank"><b>Qiskit SDK API</b><span>current circuit and primitive interfaces</span></a>
+<a href="https://quantum.cloud.ibm.com/docs/en/guides/bit-ordering" rel="noopener" target="_blank"><b>Qiskit bit ordering</b><span>avoid the most common circuit confusion</span></a>
+<a href="https://doi.org/10.1007/BF02650179" rel="noopener" target="_blank"><b>Feynman · 1982</b><span>simulating physics with computers</span></a>
+<a href="https://doi.org/10.1145/237814.237866" rel="noopener" target="_blank"><b>Grover · 1996</b><span>quantum mechanical database search</span></a>
+<a href="https://www.nist.gov/pqcrypto" rel="noopener" target="_blank"><b>NIST PQC</b><span>post-quantum cryptography is classical crypto</span></a>
+</div>
+</div>
+<div class="core"><b>q&amp;a ▸</b> beginner questions are not small questions. they are where the model becomes precise.</div>
+</section></main>
+<footer id="chromeBottom">
+<div id="stateLabel">state: <b>boot</b> · ready</div>
+<div aria-label="Presentation progress" id="progressTrack"></div>
+<div id="navButtons">
+<button aria-label="Previous slide" class="nav-button" id="prevButton" type="button"><svg aria-hidden="true" height="12" viewbox="0 0 12 12" width="12"><path d="M8 1L3 6l5 5"></path></svg></button>
+<button aria-label="Next slide" class="nav-button" id="nextButton" type="button"><svg aria-hidden="true" height="12" viewbox="0 0 12 12" width="12"><path d="M4 1l5 5-5 5"></path></svg></button>
+<span>← → · space · O overview · ? help</span>
+</div>
+</footer>
+</div>
+<div aria-labelledby="overviewTitle" aria-modal="true" class="overlay" hidden="" id="overview" role="dialog">
+<div class="overlay-shell">
+<header><div><small>deck.map</small><h2 id="overviewTitle">Jump to any idea</h2></div><button aria-label="Close overview" class="overlay-close" data-close="overview" type="button">×</button></header>
+<div class="overview-grid" id="overviewGrid"></div>
+</div>
+</div>
+<div aria-labelledby="helpTitle" aria-modal="true" class="overlay" hidden="" id="help" role="dialog">
+<div class="overlay-shell help-shell">
+<header><div><small>controls.help</small><h2 id="helpTitle">Presentation controls</h2></div><button aria-label="Close help" class="overlay-close" data-close="help" type="button">×</button></header>
+<div class="help-grid"><div><kbd>→</kbd><span>next slide</span></div><div><kbd>←</kbd><span>previous slide</span></div><div><kbd>Space</kbd><span>advance</span></div><div><kbd>O</kbd><span>slide overview</span></div><div><kbd>F</kbd><span>fullscreen</span></div><div><kbd>E</kbd><span>edit presentation text</span></div><div><kbd>Home</kbd><span>first slide</span></div><div><kbd>End</kbd><span>last slide</span></div></div>
+</div>
+</div>
+<div aria-hidden="true" id="rotateHint"><span>↻</span><b>Rotate your device</b><small>This deck is designed for landscape.</small></div>
+<div aria-live="polite" class="sr-only" id="a11yStatus"></div>
+</body>
+</html>

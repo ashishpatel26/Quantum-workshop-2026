@@ -1,0 +1,15 @@
+[project]
+name = "quantum-workshop-2026"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.1",
+    "notebook>=7.6.2",
+    "numpy>=2.5.3",
+    "pylatexenc>=2.11",
+    "qiskit>=2.5.2",
+    "qiskit-aer>=0.17",
+]

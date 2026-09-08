@@ -1,0 +1,6 @@
+qiskit>=2.5.2
+qiskit-aer>=0.17
+matplotlib
+numpy
+jupyter
+notebook

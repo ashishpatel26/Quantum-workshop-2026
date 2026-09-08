@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<title>Entangle: Quantum Computing 101 with Qiskit</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A hands-on quantum computing workshop with Qiskit: qubits, gates, entanglement, and real algorithms in ~3.5 hours.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="index.html"><span class="dot"></span> Entangle</a>
+  <nav>
+    <a href="prerequisites.html">Prerequisites</a>
+    <a href="book/01-why-quantum.html">Start the Book</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Live Workshop &middot; ~3h30&ndash;35m</span>
+  <h1>Entangle: <span class="gradient-text">Quantum Computing 101</span> with Qiskit</h1>
+  <p class="tagline">From "what's a qubit?" to running Grover's search and building a true quantum random number generator &mdash; all on a real simulator, no linear algebra required.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="prerequisites.html">Set Up Before You Arrive &rarr;</a>
+    <a class="btn btn-secondary" href="book/01-why-quantum.html">Jump Into the Book</a>
+  </div>
+</section>
+
+<div class="container">
+
+  <h2 class="section-title"><span class="num">//</span> Workshop Timeline</h2>
+  <p style="color:var(--text-dim)">12 sections across ~3 hours 30&ndash;35 minutes. Talks build intuition, hands-on labs put it into Qiskit, breaks keep everyone fresh.</p>
+
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent-2)"></span> Talk</span>
+    <span><span class="sw" style="background:var(--accent-3)"></span> Hands-On</span>
+    <span><span class="sw" style="background:var(--text-faint)"></span> Break / Logistics</span>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item type-talk">
+      <div class="tl-time">0:00&ndash;0:15</div>
+      <div class="tl-body">
+        <h3>Welcome &amp; Why Quantum</h3>
+        <p>Classical bits vs qubits, superposition and entanglement via everyday analogies, real-world applications.</p>
+      </div>
+      <div class="tl-badge">Talk</div>
+    </div>
+
+    <div class="tl-item type-talk">
+      <div class="tl-time">0:15&ndash;0:35</div>
+      <div class="tl-body">
+        <h3>Qubits, Gates &amp; the Bloch Sphere</h3>
+        <p>|0&rang; and |1&rang;, superposition, and an interactive 3D Bloch sphere for X, H, Z, Y, S, T gates.</p>
+      </div>
+      <div class="tl-badge">Talk</div>
+    </div>
+
+    <div class="tl-item type-hands-on">
+      <div class="tl-time">0:35&ndash;1:00</div>
+      <div class="tl-body">
+        <h3>Hands-On 1: Your First Circuit</h3>
+        <p>Build a 1-qubit circuit, apply H, measure, run on AerSimulator, plot the ~50/50 histogram.</p>
+      </div>
+      <div class="tl-badge">Hands-On</div>
+    </div>
+
+    <div class="tl-item type-break">
+      <div class="tl-time">1:00&ndash;1:10</div>
+      <div class="tl-body">
+        <h3>Break</h3>
+        <p>Stretch, refill coffee, ask a TA a question.</p>
+      </div>
+      <div class="tl-badge">Break</div>
+    </div>
+
+    <div class="tl-item type-talk">
+      <div class="tl-time">1:10&ndash;1:30</div>
+      <div class="tl-body">
+        <h3>Entanglement</h3>
+        <p>Bell pairs, "spooky action," and why entangled qubits are fundamentally non-classical.</p>
+      </div>
+      <div class="tl-badge">Talk</div>
+    </div>
+
+    <div class="tl-item type-hands-on">
+      <div class="tl-time">1:30&ndash;1:55</div>
+      <div class="tl-body">
+        <h3>Hands-On 2: Bell State</h3>
+        <p>H + CNOT on two qubits &mdash; prove entanglement by only ever seeing |00&rang; and |11&rang;.</p>
+      </div>
+      <div class="tl-badge">Hands-On</div>
+    </div>
+
+    <div class="tl-item type-talk">
+      <div class="tl-time">1:55&ndash;2:15</div>
+      <div class="tl-body">
+        <h3>Real Algorithms: Grover &amp; Shor</h3>
+        <p>Quadratic speedup search via amplitude amplification, and why Shor's algorithm worries cryptographers.</p>
+      </div>
+      <div class="tl-badge">Talk</div>
+    </div>
+
+    <div class="tl-item type-break">
+      <div class="tl-time">2:15&ndash;2:25</div>
+      <div class="tl-body">
+        <h3>Break</h3>
+        <p>Short breather before the algorithm lab.</p>
+      </div>
+      <div class="tl-badge">Break</div>
+    </div>
+
+    <div class="tl-item type-hands-on">
+      <div class="tl-time">2:25&ndash;2:55</div>
+      <div class="tl-body">
+        <h3>Hands-On 3: Mini Grover's Search</h3>
+        <p>Templated 2-qubit Grover's search: oracle, diffuser, amplification, measurement. (Optional/trimmable.)</p>
+      </div>
+      <div class="tl-badge">Hands-On</div>
+    </div>
+
+    <div class="tl-item type-hands-on">
+      <div class="tl-time">2:55&ndash;3:15</div>
+      <div class="tl-body">
+        <h3>Capstone: True Quantum RNG</h3>
+        <p>Generate genuinely random bits from superposition &mdash; and see why classical "random" never really is.</p>
+      </div>
+      <div class="tl-badge">Hands-On</div>
+    </div>
+
+    <div class="tl-item type-talk">
+      <div class="tl-time">3:15&ndash;3:25</div>
+      <div class="tl-body">
+        <h3>Where to Go Next</h3>
+        <p>Qiskit Global Summer School, IBM Quantum Learning, the Qiskit Textbook, and real hardware access.</p>
+      </div>
+      <div class="tl-badge">Talk</div>
+    </div>
+
+    <div class="tl-item type-break">
+      <div class="tl-time">3:25&ndash;3:35</div>
+      <div class="tl-body">
+        <h3>Q&amp;A + Feedback</h3>
+        <p>Open floor for questions and a quick feedback survey.</p>
+      </div>
+      <div class="tl-badge">Wrap-Up</div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title"><span class="num">//</span> Before You Arrive</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Install Qiskit</h3>
+      <p>Python 3.10+, a virtual environment, and <code>qiskit</code> + <code>qiskit-aer</code>. Full copy-paste guide with a smoke test.</p>
+      <a href="prerequisites.html">Go to Prerequisites &rarr;</a>
+    </div>
+    <div class="card">
+      <h3>No Laptop Setup? No Problem</h3>
+      <p>Offline wheel files and USB fallback are covered for weak-wifi venues. TAs float during the first 15&ndash;20 minutes to help.</p>
+      <a href="prerequisites.html#troubleshooting">Troubleshooting &rarr;</a>
+    </div>
+    <div class="card">
+      <h3>Start Reading</h3>
+      <p>The full 9-chapter workshop book, cross-linked with a sidebar and prev/next navigation.</p>
+      <a href="book/01-why-quantum.html">Chapter 1: Why Quantum &rarr;</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Entangle: Quantum Computing 101 with Qiskit &middot; Built with Qiskit + Three.js &middot; <a href="https://github.com/ashishpatel26/Quantum-workshop-2026">View on GitHub</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="assets/main.js"></script>
+<script src="assets/quantum-fx.js"></script>

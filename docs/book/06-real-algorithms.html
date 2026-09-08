@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<title>Real Algorithms &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a class="active" href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 6 &middot; Talk</span>
+    <h1>Real Algorithms: Grover &amp; Shor</h1>
+    <p class="lede">Two of the most famous quantum algorithms &mdash; one we'll actually run today, one we'll only admire from a distance.</p>
+
+    <h2>Grover's Search: Finding a Needle Faster</h2>
+    <p>Imagine an unsorted phone book with a million entries and you need to find the one entry matching a phone number. Classically, in the worst case, you have to check entries one by one &mdash; up to a million checks. Grover's algorithm finds it in roughly the <strong>square root</strong> of that many steps &mdash; about a thousand instead of a million. That's a quadratic speedup, and it applies to any "needle in a haystack" search problem with no special structure to exploit.</p>
+
+    <h2>How? Amplitude Amplification</h2>
+    <p>Grover's trick is to put all possible answers into superposition at once, then repeatedly nudge the "correct" answer's probability amplitude up while nudging the wrong answers' amplitudes down. After enough nudges (roughly &radic;N of them), measuring the qubits gives you the right answer with very high probability.</p>
+
+    <div class="amp-bars" id="ampDemo">
+      <div class="amp-col"><div class="amp-bar" id="amp0" style="height:20%"></div><div class="hist-label">00</div></div>
+      <div class="amp-col"><div class="amp-bar" id="amp1" style="height:20%"></div><div class="hist-label">01</div></div>
+      <div class="amp-col"><div class="amp-bar marked" id="amp2" style="height:20%"></div><div class="hist-label">10 &larr; marked</div></div>
+      <div class="amp-col"><div class="amp-bar" id="amp3" style="height:20%"></div><div class="hist-label">11</div></div>
+    </div>
+    <div style="text-align:center;margin-top:0.8rem;">
+      <button class="gate-btn" id="ampStepBtn">Amplify &rarr;</button>
+      <button class="gate-btn reset" id="ampResetBtn">Reset</button>
+    </div>
+    <p style="text-align:center;color:var(--text-dim);font-size:0.88rem;">Click "Amplify" a few times to watch the marked state's bar grow while the others shrink &mdash; the intuitive picture behind Grover's algorithm.</p>
+
+    <h2>Shor's Algorithm: Why It Worries Cryptographers</h2>
+    <p>Factoring a large number into its prime components is easy to state and brutally slow classically &mdash; the best known classical algorithms take exponential-ish time as numbers get bigger, which is exactly why RSA encryption (used all over the internet) relies on factoring being hard.</p>
+    <p>Shor's algorithm factors large numbers in <strong>polynomial time</strong> on a sufficiently large, fault-tolerant quantum computer. If such a machine existed at scale, it could break RSA encryption as we know it. That "if" is doing a lot of work today &mdash; current quantum hardware isn't remotely large or reliable enough to run Shor's algorithm against real-world key sizes &mdash; but it's exactly why "post-quantum cryptography" is already an active research and standardization effort.</p>
+
+    <div class="callout">
+      <strong>We won't implement Shor's today.</strong> It requires far more qubits and error correction than a workshop laptop simulator can practically demonstrate. Think of it as inspiration for where the field is headed, not something on today's hands-on menu.
+    </div>
+
+    <div class="callout success">
+      <strong>Grover's, though, we can run.</strong> Chapter 7 walks through a full 2-qubit Grover's search you'll build yourself.
+    </div>
+
+    <div class="pagenav">
+      <a href="05-hands-on-2-bell-state.html"><small>Back</small>&larr; Hands-On 2: Bell State</a>
+      <a class="to-next" href="07-hands-on-3-grovers.html"><small>Next</small>Hands-On 3: Grover's Search &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  var ampStep = 0;
+  var target = [5, 5, 85, 5];
+  var base = [20, 20, 20, 20];
+  function renderAmp(vals) {
+    document.getElementById("amp0").style.height = vals[0] + "%";
+    document.getElementById("amp1").style.height = vals[1] + "%";
+    document.getElementById("amp2").style.height = vals[2] + "%";
+    document.getElementById("amp3").style.height = vals[3] + "%";
+  }
+  document.getElementById("ampStepBtn").addEventListener("click", function () {
+    ampStep = Math.min(ampStep + 1, 4);
+    var t = ampStep / 4;
+    var vals = base.map(function (b, i) { return b + (target[i] - b) * t; });
+    renderAmp(vals);
+  });
+  document.getElementById("ampResetBtn").addEventListener("click", function () {
+    ampStep = 0;
+    renderAmp(base);
+  });
+</script>

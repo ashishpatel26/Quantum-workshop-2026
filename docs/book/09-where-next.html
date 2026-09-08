@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<title>Where to Go Next &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a class="active" href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 9 &middot; Talk</span>
+    <h1>Where to Go Next</h1>
+    <p class="lede">You built and ran real quantum circuits today &mdash; superposition, entanglement, a search algorithm, and a working quantum RNG. That knowledge transfers directly beyond the simulator.</p>
+
+    <h2>From Simulator to Real Hardware</h2>
+    <div class="callout success">
+      <strong>Everything you wrote today runs on real IBM Quantum hardware with minimal changes.</strong> The <code>AerSimulator</code> we used behaves like a quantum computer; swapping it for a real quantum backend uses the same <code>QuantumCircuit</code> objects, the same gates, and largely the same Qiskit API. The concepts, code structure, and intuition you built today are not simulator-only tricks &mdash; they are the actual skills used to program real quantum processors.
+    </div>
+
+    <h2>Where to Keep Learning</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Qiskit Global Summer School</h3>
+        <p>IBM's free, in-depth annual summer school covering quantum computing from fundamentals through advanced algorithms, with lecture recordings and hands-on labs available afterward.</p>
+      </div>
+      <div class="card">
+        <h3>IBM Quantum Learning</h3>
+        <p>IBM's structured learning platform with courses ranging from "Basics of Quantum Information" to advanced algorithm design, plus access to run circuits on real IBM Quantum hardware.</p>
+      </div>
+      <div class="card">
+        <h3>Qiskit Textbook</h3>
+        <p>A comprehensive, freely available textbook covering the math, code, and intuition behind quantum computing and Qiskit in much greater depth than a single workshop can.</p>
+      </div>
+    </div>
+
+    <h2>Ideas to Keep Building</h2>
+    <ul style="color:var(--text-dim)">
+      <li>Extend today's Grover's search to 3+ qubits and multiple marked states.</li>
+      <li>Explore quantum teleportation &mdash; another classic Bell-pair-based protocol.</li>
+      <li>Try running one of today's circuits on real IBM Quantum hardware and compare the (noisier!) results to the simulator.</li>
+      <li>Look into variational algorithms (VQE, QAOA) &mdash; today's near-term approach to quantum advantage on imperfect hardware.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Thank you for attending Entangle.</strong> Stick around for Q&amp;A and let us know what you'd like to see in a follow-up workshop.
+    </div>
+
+    <div class="pagenav">
+      <a href="08-capstone-qrng.html"><small>Back</small>&larr; Capstone: Quantum RNG</a>
+      <a class="to-next" href="../index.html"><small>Finish</small>Back to Home &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>

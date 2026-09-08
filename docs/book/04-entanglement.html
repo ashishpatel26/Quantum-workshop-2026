@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<title>Entanglement &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a class="active" href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 4 &middot; Talk</span>
+    <h1>Entanglement</h1>
+    <p class="lede">Two qubits can become linked so tightly that measuring one instantly tells you about the other &mdash; no matter how far apart they are. This is the single most "quantum" phenomenon in the whole workshop.</p>
+
+    <h2>Bell Pairs</h2>
+    <p>The simplest entangled state is called a <strong>Bell pair</strong>: two qubits prepared so that they will always be measured as the <em>same</em> value &mdash; both 0, or both 1 &mdash; but which value is only decided at the moment of measurement. Before that, neither qubit has a definite state on its own; only the pair as a whole is well-defined.</p>
+
+    <div class="entangle-svg-wrap">
+      <svg width="480" height="220" viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+        <defs>
+          <radialGradient id="qgrad1" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.05"/>
+          </radialGradient>
+          <radialGradient id="qgrad2" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#f472b6" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#f472b6" stop-opacity="0.05"/>
+          </radialGradient>
+        </defs>
+        <circle cx="110" cy="110" r="80" fill="url(#qgrad1)" stroke="#22d3ee" stroke-width="2" opacity="0.8"/>
+        <circle cx="370" cy="110" r="80" fill="url(#qgrad2)" stroke="#f472b6" stroke-width="2" opacity="0.8"/>
+        <text x="110" y="115" text-anchor="middle" fill="#e8eaf6" font-size="18" font-weight="bold">Qubit A</text>
+        <text x="370" y="115" text-anchor="middle" fill="#e8eaf6" font-size="18" font-weight="bold">Qubit B</text>
+        <line x1="190" y1="110" x2="290" y2="110" stroke="#fbbf24" stroke-width="3" stroke-dasharray="6,6">
+          <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.2s" repeatCount="indefinite"/>
+        </line>
+        <text x="240" y="95" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="bold">entangled</text>
+      </svg>
+    </div>
+
+    <h2>Classical Correlation vs Quantum Entanglement</h2>
+    <p>You might think "so what, correlated things exist classically too." Consider two coins <em>glued together</em> back-to-back before being separated and mailed to two cities: if you know one is heads-up, you instantly know the other is tails-up. That's classical correlation &mdash; but the outcome was decided the moment you glued them, it just wasn't revealed until later. There's a "hidden variable" (which way they were glued) that determined everything in advance.</p>
+    <p>Entangled qubits are different: physics experiments (testing what's called <strong>Bell's inequality</strong>) show there is <em>no</em> hidden variable decided in advance. The outcome genuinely doesn't exist until measurement &mdash; and yet the two qubits' outcomes are still perfectly correlated. That combination (genuinely undetermined, yet perfectly correlated) has no classical explanation. It's not that we don't know the pre-existing answer; there simply isn't one until you look.</p>
+
+    <table class="compare-table">
+      <thead><tr><th>Classical Correlation (glued coins)</th><th>Quantum Entanglement (Bell pair)</th></tr></thead>
+      <tbody>
+        <tr><td>Outcome fixed in advance, just hidden</td><td>Outcome undetermined until measurement</td></tr>
+        <tr><td>Explained by a hidden variable</td><td>Provably has no hidden variable (Bell's inequality)</td></tr>
+        <tr><td>Correlation is "boring," classical statistics</td><td>Correlation is stronger than any classical model allows</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>Not faster-than-light communication:</strong> even though measuring one qubit instantly affects our knowledge of the other, you can't use entanglement to send a message faster than light &mdash; the outcome you see is still random, and there's no way to control what the other party sees. It's a subtle point worth remembering if you read about entanglement elsewhere.
+    </div>
+
+    <div class="callout success">
+      <strong>Next up:</strong> stop reading about it &mdash; let's build a Bell pair in Qiskit and prove entanglement with our own eyes.
+    </div>
+
+    <div class="pagenav">
+      <a href="03-hands-on-1-first-circuit.html"><small>Back</small>&larr; Hands-On 1: First Circuit</a>
+      <a class="to-next" href="05-hands-on-2-bell-state.html"><small>Next</small>Hands-On 2: Bell State &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>

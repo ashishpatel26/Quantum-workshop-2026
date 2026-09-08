@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<title>Hands-On 3: Grover's Search &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a class="active" href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 7 &middot; Hands-On Lab (Optional)</span>
+    <h1>Mini Grover's Search</h1>
+    <p class="lede">A guided 2-qubit Grover's search that finds a "marked" state. This section is optional and trimmable if the workshop is running short on time &mdash; feel free to skip straight to the Capstone.</p>
+
+    <div class="callout warn">
+      <strong>Time note:</strong> if the room is behind schedule, this is the section to cut. The Capstone (Chapter 8) does not depend on it.
+    </div>
+
+    <h2>The Goal</h2>
+    <p>With 2 qubits there are 4 possible states: <code>00</code>, <code>01</code>, <code>10</code>, <code>11</code>. We'll mark one of them &mdash; let's say <code>11</code> &mdash; as the answer we're searching for, then use Grover's algorithm to amplify its probability so measuring the circuit finds it almost every time.</p>
+
+    <h2>The Full Code</h2>
+    <pre><code class="language-python">from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+n = 2  # number of qubits
+qc = QuantumCircuit(n, n)
+
+# --- Step 1: Superposition over all 4 states ---
+qc.h([0, 1])
+
+# --- Step 2: Oracle that "marks" the state |11> ---
+# A controlled-Z flips the sign only when both qubits are |1>,
+# which is exactly the phase "tag" Grover's algorithm needs.
+def oracle_mark_11(qc):
+    qc.cz(0, 1)
+
+oracle_mark_11(qc)
+
+# --- Step 3: Diffuser (inversion about the mean) ---
+# This is the "amplification" step: it reflects every amplitude
+# around the average, boosting the marked state and shrinking the rest.
+def diffuser(qc, n):
+    qc.h(range(n))
+    qc.x(range(n))
+    qc.h(1)
+    qc.cx(0, 1)
+    qc.h(1)
+    qc.x(range(n))
+    qc.h(range(n))
+
+diffuser(qc, n)
+
+# --- Step 4: Measure ---
+qc.measure(range(n), range(n))
+
+# --- Step 5: Run it ---
+simulator = AerSimulator()
+result = simulator.run(qc, shots=1000).result()
+counts = result.get_counts()
+
+print(counts)   # '11' should dominate the counts
+plot_histogram(counts)</code></pre>
+
+    <h2>What Each Step Does</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. Superposition</h3>
+        <p>Two Hadamards put both qubits into an equal superposition of all 4 possible 2-bit states &mdash; the "search space."</p>
+      </div>
+      <div class="card">
+        <h3>2. Oracle</h3>
+        <p>The oracle doesn't "know" the answer in a classical sense &mdash; it just flips the sign (phase) of the amplitude belonging to the marked state, tagging it without collapsing anything.</p>
+      </div>
+      <div class="card">
+        <h3>3. Diffuser</h3>
+        <p>Reflects all amplitudes around their average. Because the marked state's amplitude was flipped negative, this reflection makes it stick out further from the rest &mdash; amplification in action.</p>
+      </div>
+      <div class="card">
+        <h3>4&ndash;5. Measure &amp; Run</h3>
+        <p>With just 4 states, a single oracle+diffuser round is enough to make <code>'11'</code> overwhelmingly the most common measurement result.</p>
+      </div>
+    </div>
+
+    <h2>Before vs After Amplification</h2>
+    <div class="amp-bars">
+      <div class="amp-col"><div class="amp-bar" style="height:25%"></div><div class="hist-label">00 (before)</div></div>
+      <div class="amp-col"><div class="amp-bar" style="height:25%"></div><div class="hist-label">01 (before)</div></div>
+      <div class="amp-col"><div class="amp-bar" style="height:25%"></div><div class="hist-label">10 (before)</div></div>
+      <div class="amp-col"><div class="amp-bar marked" style="height:25%"></div><div class="hist-label">11 (before)</div></div>
+    </div>
+    <p style="text-align:center;color:var(--text-faint);margin:0.5rem 0;">&darr; after one Grover iteration &darr;</p>
+    <div class="amp-bars">
+      <div class="amp-col"><div class="amp-bar" style="height:3%"></div><div class="hist-label">00</div></div>
+      <div class="amp-col"><div class="amp-bar" style="height:3%"></div><div class="hist-label">01</div></div>
+      <div class="amp-col"><div class="amp-bar" style="height:3%"></div><div class="hist-label">10</div></div>
+      <div class="amp-col"><div class="amp-bar marked" style="height:95%"></div><div class="hist-label">11 &larr; found!</div></div>
+    </div>
+
+    <div class="callout success">
+      <strong>Try it yourself:</strong> change the oracle to mark a different state (e.g. swap <code>qc.cz(0,1)</code> for an X-sandwiched version to mark <code>01</code> or <code>10</code>) and confirm the histogram peak moves with it.
+    </div>
+
+    <div class="pagenav">
+      <a href="06-real-algorithms.html"><small>Back</small>&larr; Real Algorithms</a>
+      <a class="to-next" href="08-capstone-qrng.html"><small>Next</small>Capstone: Quantum RNG &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>

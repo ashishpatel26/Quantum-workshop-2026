@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<title>Prerequisites &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pre-workshop setup guide for Entangle: Quantum Computing 101 with Qiskit.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="index.html"><span class="dot"></span> Entangle</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="book/01-why-quantum.html">Start the Book</a>
+  </nav>
+</header>
+
+<div class="container narrow">
+  <span class="eyebrow">Do this before the workshop</span>
+  <h1 style="font-size:2.4rem;margin-top:0.6rem;">Pre-Workshop <span class="gradient-text">Setup Guide</span></h1>
+  <p style="color:var(--text-dim);font-size:1.1rem;">Fifteen minutes now saves everyone time on the day. Follow these steps in order and run the smoke test at the end.</p>
+
+  <div class="callout">
+    <strong>Day-of buffer:</strong> we build in +15&ndash;20 minutes at the start of the workshop for stragglers and install hiccups, and TAs float the room to help &mdash; so don't panic if something doesn't work immediately. But doing this now means you spend that time learning quantum computing instead of fixing pip.
+  </div>
+
+  <h2 class="section-title"><span class="num">01</span> Check Python</h2>
+  <p>You need <strong>Python 3.10 or newer</strong>. Check your version:</p>
+  <pre><code class="language-bash">python --version</code></pre>
+  <p>Expect something like <code>Python 3.11.6</code>. If you see Python 2.x, or the command isn't found, try <code>python3 --version</code> instead. If you don't have Python 3.10+, install it from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a> before continuing.</p>
+
+  <h2 class="section-title"><span class="num">02</span> Create &amp; Activate a Virtual Environment</h2>
+  <p>A virtual environment keeps workshop packages isolated from the rest of your system.</p>
+
+  <div class="tabs">
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="mac">macOS / Linux</button>
+      <button class="tab-btn" data-tab="win">Windows</button>
+    </div>
+    <div class="tab-panel active" data-tab="mac">
+      <pre><code class="language-bash">python3 -m venv entangle-env
+source entangle-env/bin/activate</code></pre>
+      <p style="margin-top:0.6rem;color:var(--text-dim);font-size:0.9rem;">Your prompt should now start with <code>(entangle-env)</code>.</p>
+    </div>
+    <div class="tab-panel" data-tab="win">
+      <pre><code class="language-powershell">python -m venv entangle-env
+entangle-env\Scripts\Activate.ps1</code></pre>
+      <p style="margin-top:0.6rem;color:var(--text-dim);font-size:0.9rem;">Using Command Prompt instead of PowerShell? Run <code>entangle-env\Scripts\activate.bat</code> instead. See the troubleshooting section below if PowerShell blocks the script.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title"><span class="num">03</span> Install Qiskit &amp; Friends</h2>
+  <p>With your virtual environment active, install everything we'll use today:</p>
+  <pre><code class="language-bash">pip install qiskit qiskit-aer matplotlib jupyter notebook</code></pre>
+  <p>This pulls in:</p>
+  <ul style="color:var(--text-dim)">
+    <li><code>qiskit</code> &mdash; the core quantum SDK (circuits, gates, visualization)</li>
+    <li><code>qiskit-aer</code> &mdash; the high-performance local simulator we'll run circuits on</li>
+    <li><code>matplotlib</code> &mdash; used by Qiskit's plotting functions (histograms, Bloch spheres)</li>
+    <li><code>jupyter</code> / <code>notebook</code> &mdash; for running code interactively during the labs</li>
+  </ul>
+
+  <h2 class="section-title"><span class="num">04</span> Smoke Test</h2>
+  <p>Confirm everything installed correctly. Create a file called <code>smoke_test.py</code> with:</p>
+  <pre><code class="language-python">import qiskit
+print(qiskit.__version__)</code></pre>
+  <p>Run it:</p>
+  <pre><code class="language-bash">python smoke_test.py</code></pre>
+  <div class="callout success">
+    <strong>Expected output:</strong> a version string such as <code>1.2.4</code> (any recent 1.x or 2.x release is fine). No traceback, no red text.
+  </div>
+  <p>If it fails, check the <a href="#troubleshooting">Troubleshooting</a> section below before the workshop &mdash; or just bring your laptop as-is, a TA will help you get set up in the first 15&ndash;20 minutes.</p>
+
+  <h2 class="section-title"><span class="num">05</span> Weak Wifi at the Venue?</h2>
+  <div class="callout warn">
+    <strong>Offline fallback:</strong> conference wifi struggles when 40 laptops all run <code>pip install</code> at once. If you know the venue has weak wifi, download the wheel files ahead of time on a fast connection with:
+    <pre style="margin-top:0.8rem;"><code class="language-bash">pip download qiskit qiskit-aer matplotlib jupyter notebook -d qiskit_wheels/</code></pre>
+    Bring the <code>qiskit_wheels/</code> folder on a USB stick, and on the day install offline with:
+    <pre><code class="language-bash">pip install --no-index --find-links=qiskit_wheels/ qiskit qiskit-aer matplotlib jupyter notebook</code></pre>
+    Organizers: consider bringing a few spare USB sticks pre-loaded with wheels for attendees who couldn't prep in advance.
+  </div>
+
+  <h2 class="section-title" id="troubleshooting"><span class="num">06</span> Troubleshooting</h2>
+
+  <div class="callout danger">
+    <strong>"pip: command not found" / "pip is not recognized"</strong>
+    <p style="margin:0.5rem 0 0;">Your Python install may not have added pip to PATH. Try <code>python -m pip install ...</code> (or <code>python3 -m pip ...</code>) instead of calling <code>pip</code> directly &mdash; this routes through the Python interpreter you know is on PATH.</p>
+  </div>
+
+  <div class="callout danger">
+    <strong>Windows: "cannot be loaded because running scripts is disabled on this system"</strong>
+    <p style="margin:0.5rem 0 0;">PowerShell's execution policy is blocking the venv activation script. Run PowerShell as your normal user (not admin) and allow scripts for your current session only:</p>
+    <pre style="margin-top:0.6rem"><code class="language-powershell">Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code></pre>
+    <p style="margin:0.5rem 0 0;">Then re-run <code>entangle-env\Scripts\Activate.ps1</code>. This only affects the current terminal window, not your whole system.</p>
+  </div>
+
+  <div class="callout danger">
+    <strong>Version conflicts / "ResolutionImpossible" during install</strong>
+    <p style="margin:0.5rem 0 0;">Usually caused by an old global package clashing with Qiskit's dependencies. Make sure you actually activated the virtual environment (prompt shows <code>(entangle-env)</code>) before installing &mdash; if you skipped that step, packages installed globally can conflict. If problems persist, delete the venv folder and recreate it fresh:</p>
+    <pre style="margin-top:0.6rem"><code class="language-bash">rm -rf entangle-env   # or: rmdir /s entangle-env on Windows cmd
+python -m venv entangle-env</code></pre>
+  </div>
+
+  <div class="callout danger">
+    <strong>Import error / DLL load failed on Windows</strong>
+    <p style="margin:0.5rem 0 0;">Usually means a mismatched Python architecture (32-bit vs 64-bit) or a very old Python version. Reinstall the 64-bit Python 3.10+ installer from python.org and recreate your virtual environment.</p>
+  </div>
+
+  <div class="callout">
+    <strong>Still stuck?</strong> Don't spend the night debugging &mdash; bring your laptop as-is. We build in 15&ndash;20 minutes at the start of the workshop specifically for this, and TAs will be floating the room ready to help.
+  </div>
+
+  <div class="pagenav">
+    <a href="index.html"><small>Back</small>&larr; Home</a>
+    <a class="to-next" href="book/01-why-quantum.html"><small>Next</small>Chapter 1: Why Quantum &rarr;</a>
+  </div>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/powershell.min.js"></script>
+<script src="assets/main.js"></script>
+<script src="assets/quantum-fx.js"></script>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<title>Capstone: Quantum RNG &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a class="active" href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 8 &middot; Capstone Hands-On Lab</span>
+    <h1>Capstone: True Quantum Random Number Generator</h1>
+    <p class="lede">Everything you've learned &mdash; superposition, measurement, the simulator &mdash; comes together to build something genuinely useful: a random number generator that is <em>actually</em> random, not just random-looking.</p>
+
+    <h2>The Full Code</h2>
+    <pre><code class="language-python">from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+def quantum_random_bits(num_bits):
+    """Generate truly random bits using quantum superposition"""
+    qc = QuantumCircuit(num_bits, num_bits)
+    qc.h(range(num_bits))          # put every qubit in superposition
+    qc.measure(range(num_bits), range(num_bits))
+
+    simulator = AerSimulator()
+    result = simulator.run(qc, shots=1).result()
+    bitstring = list(result.get_counts().keys())[0]
+    return bitstring
+
+# Generate an 8-bit random number
+random_bits = quantum_random_bits(8)
+random_int = int(random_bits, 2)
+
+print(f"Random bits: {random_bits}")
+print(f"Random integer (0-255): {random_int}")</code></pre>
+
+    <h2>Why This Is Actually Random</h2>
+    <p>Every qubit is put into an equal superposition with a Hadamard gate, then measured exactly once. Quantum measurement isn't like rolling a physical die whose outcome is technically determined by initial conditions we just can't track (air currents, exact throw force, etc.) &mdash; the outcome of measuring a qubit in superposition is <strong>fundamentally undetermined</strong> until the moment of measurement. There is no hidden state that "already decided" the answer in advance.</p>
+
+    <div class="callout">
+      <strong>Classical "random" isn't:</strong> Python's <code>random.randint()</code> and virtually every classical random number generator is a <em>pseudo</em>-random number generator (PRNG). Given the same seed, it produces the exact same sequence every time &mdash; it just looks unpredictable because the seed (often the system clock) is hard to guess. It's deterministic under the hood. A quantum measurement has no such seed to reconstruct: it's provably, not just practically, non-deterministic.
+    </div>
+
+    <h2>Real-World Use Cases</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Cryptographic Keys</h3>
+        <p>Encryption keys are only as strong as their randomness. A predictable "random" key generator is a security hole; true quantum randomness closes it.</p>
+      </div>
+      <div class="card">
+        <h3>Secure Tokens</h3>
+        <p>Session tokens, one-time passwords, and API keys all rely on unpredictability to resist guessing attacks.</p>
+      </div>
+      <div class="card">
+        <h3>Fair Lottery Systems</h3>
+        <p>Verifiable, provably-unbiased randomness matters anywhere fairness must be trusted publicly &mdash; lotteries, draws, and audits.</p>
+      </div>
+    </div>
+
+    <h2>Extend It Live: Idea A &mdash; PIN / Password Generator</h2>
+    <p>Map the random bits onto a character set to build a quantum-seeded password generator:</p>
+    <pre><code class="language-python">import string
+
+def quantum_password(length=12):
+    charset = string.ascii_letters + string.digits + "!@#$%^&*"
+    bits_needed = length * 8  # generous entropy per character
+    bits = quantum_random_bits(bits_needed)
+
+    password = ""
+    for i in range(length):
+        chunk = bits[i*8:(i+1)*8]
+        index = int(chunk, 2) % len(charset)
+        password += charset[index]
+    return password
+
+print(quantum_password(12))</code></pre>
+
+    <h2>Extend It Live: Idea B &mdash; Compare Against Classical Randomness</h2>
+    <pre><code class="language-python">import random
+
+# Classical pseudo-random (deterministic given a seed)
+random.seed(42)
+classical_value = random.randint(0, 255)
+print(f"Classical (seeded): {classical_value}")
+
+random.seed(42)
+classical_value_again = random.randint(0, 255)
+print(f"Classical (same seed again): {classical_value_again}")
+# -> identical every time: pseudo-random, not truly random
+
+# Quantum: no seed exists to reproduce
+quantum_value = int(quantum_random_bits(8), 2)
+print(f"Quantum: {quantum_value}")</code></pre>
+    <p>Run the classical block twice with the same seed and you'll get the <em>exact same number</em> both times &mdash; that's determinism hiding behind the word "random." There is no seed you can set for the quantum version that will reproduce a chosen output; the non-determinism is a property of physics, not of missing information.</p>
+
+    <div class="callout success">
+      <strong>You built a quantum random number generator.</strong> That's the whole workshop's arc: superposition &rarr; measurement &rarr; a genuinely useful, genuinely non-classical result.
+    </div>
+
+    <div class="pagenav">
+      <a href="07-hands-on-3-grovers.html"><small>Back</small>&larr; Hands-On 3: Grover's Search</a>
+      <a class="to-next" href="09-where-next.html"><small>Next</small>Where to Go Next &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<title>Hands-On 2: Bell State &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a class="active" href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 5 &middot; Hands-On Lab</span>
+    <h1>Building a Bell State</h1>
+    <p class="lede">Two qubits, two gates, one proof of entanglement. Let's build it.</p>
+
+    <h2>The Full Code</h2>
+    <pre><code class="language-python">from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+# 1. Two qubits, two classical bits
+qc = QuantumCircuit(2, 2)
+
+# 2. Hadamard on qubit 0 -> superposition
+qc.h(0)
+
+# 3. CNOT: qubit 0 is control, qubit 1 is target
+#    This entangles the two qubits.
+qc.cx(0, 1)
+
+# 4. Measure both qubits
+qc.measure([0, 1], [0, 1])
+
+# 5. Run on the simulator
+simulator = AerSimulator()
+result = simulator.run(qc, shots=1000).result()
+counts = result.get_counts()
+
+print(counts)          # e.g. {'00': 498, '11': 502}
+plot_histogram(counts)</code></pre>
+
+    <h2>What's New Here: CNOT</h2>
+    <p><code>qc.cx(0, 1)</code> is a <strong>controlled-NOT</strong> gate: if the control qubit (0) is |1&rang;, it flips the target qubit (1); if the control is |0&rang;, it does nothing. Combined with the Hadamard on qubit 0, this creates the entangled state: qubit 0 is in superposition, and the CNOT links qubit 1's fate to whatever qubit 0 ends up being.</p>
+
+    <h2>Why Only 00 and 11 Ever Appear</h2>
+    <p>Look closely at the histogram from a real run: you will <em>only</em> ever see <code>'00'</code> and <code>'11'</code> &mdash; never <code>'01'</code> or <code>'10'</code>. This is the visual proof of entanglement from Chapter 4: the two qubits always agree.</p>
+
+    <div class="histogram">
+      <div class="hist-bar-col">
+        <div class="hist-pct">~50%</div>
+        <div class="hist-bar bell-bar" id="bellBar00" style="height:0"></div>
+        <div class="hist-label">'00'</div>
+      </div>
+      <div class="hist-bar-col">
+        <div class="hist-pct">0%</div>
+        <div class="hist-bar" style="height:2px;opacity:0.3;"></div>
+        <div class="hist-label">'01'</div>
+      </div>
+      <div class="hist-bar-col">
+        <div class="hist-pct">0%</div>
+        <div class="hist-bar" style="height:2px;opacity:0.3;"></div>
+        <div class="hist-label">'10'</div>
+      </div>
+      <div class="hist-bar-col">
+        <div class="hist-pct">~50%</div>
+        <div class="hist-bar bell-bar" id="bellBar11" style="height:0"></div>
+        <div class="hist-label">'11'</div>
+      </div>
+    </div>
+
+    <p>If these two qubits were independent (not entangled), you'd expect all four outcomes &mdash; 00, 01, 10, 11 &mdash; each roughly a quarter of the time, since each qubit's Hadamard-driven coin flip would be its own event. Instead we see exactly two outcomes, each roughly half the time: proof the qubits are correlated in a way classical independent bits never could be.</p>
+
+    <div class="callout success">
+      <strong>Try it yourself:</strong> comment out the <code>qc.cx(0, 1)</code> line and re-run. Now qubit 1 stays at |0&rang; regardless of qubit 0, and you'll only ever see <code>'00'</code> and <code>'01'</code> (not entangled — no correlation at all). Put the CNOT back to restore entanglement.
+    </div>
+
+    <div class="pagenav">
+      <a href="04-entanglement.html"><small>Back</small>&larr; Entanglement</a>
+      <a class="to-next" href="06-real-algorithms.html"><small>Next</small>Real Algorithms &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      document.getElementById("bellBar00").style.height = "80%";
+      document.getElementById("bellBar11").style.height = "83%";
+    }, 200);
+  });
+</script>

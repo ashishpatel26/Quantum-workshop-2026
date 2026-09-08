@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<title>Qubits, Gates &amp; the Bloch Sphere &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../prerequisites.html">Prerequisites</a>
+  </nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a class="active" href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 2 &middot; Talk</span>
+    <h1>Qubits, Gates &amp; the Bloch Sphere</h1>
+    <p class="lede">Every single-qubit state can be pictured as a point on a sphere. Gates are just rotations of that point. Drag any sphere below to look at it from any angle.</p>
+
+    <h2>|0&rang; and |1&rang;</h2>
+    <p>The north pole of the sphere is the state |0&rang; (the quantum equivalent of classical "0"). The south pole is |1&rang;. A qubit that's purely |0&rang; or purely |1&rang; behaves just like a classical bit. The interesting stuff happens everywhere <em>else</em> on the sphere.</p>
+
+    <h2>Superposition</h2>
+    <p>When the point sits on the equator, the qubit is in an equal superposition of |0&rang; and |1&rang; &mdash; a 50/50 mixture that will measure as 0 half the time and 1 half the time, chosen randomly at the moment of measurement. The Hadamard gate (below) is how we get there.</p>
+
+    <div class="bloch-wrap" style="max-width:340px;margin:1.5rem auto;">
+      <div class="bloch-canvas" id="bloch-main"></div>
+      <div class="bloch-label" id="bloch-main-label">State: |0&rang;</div>
+      <div class="bloch-desc">Drag to rotate the view. Use the buttons to apply a gate.</div>
+      <div class="gate-buttons">
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="X">X</button>
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="Y">Y</button>
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="Z">Z</button>
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="H">H</button>
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="S">S</button>
+        <button class="gate-btn" data-bloch-target="bloch-main" data-gate="T">T</button>
+        <button class="gate-btn reset" data-bloch-target="bloch-main" data-gate="RESET">Reset</button>
+      </div>
+    </div>
+
+    <h2>Meet the Gates</h2>
+    <p>Each gate below rotates the state vector a fixed way. Click "Apply" on any card to watch the qubit move.</p>
+
+    <div class="gate-grid">
+
+      <div class="card">
+        <h3>X &mdash; Bit Flip</h3>
+        <p>Flips |0&rang; &harr; |1&rang;. A 180&deg; rotation around the X axis &mdash; the quantum version of a classical NOT gate.</p>
+        <div class="bloch-canvas" id="bloch-x" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-x" data-gate="X">Apply X</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-x" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>H &mdash; Hadamard</h3>
+        <p>Creates superposition. Rotates the point from a pole onto the equator &mdash; an equal mix of |0&rang; and |1&rang;.</p>
+        <div class="bloch-canvas" id="bloch-h" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-h" data-gate="H">Apply H</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-h" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Z &mdash; Phase Flip</h3>
+        <p>Leaves |0&rang; alone but flips the "phase" of |1&rang;. A 180&deg; rotation around the Z axis &mdash; invisible if you start at a pole, dramatic on the equator.</p>
+        <div class="bloch-canvas" id="bloch-z" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-z" data-gate="H">Apply H first</button>
+          <button class="gate-btn" data-bloch-target="bloch-z" data-gate="Z">Apply Z</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-z" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Y &mdash; Bonus</h3>
+        <p>Like X and Z combined: flips the bit <em>and</em> the phase. A 180&deg; rotation around the Y axis.</p>
+        <div class="bloch-canvas" id="bloch-y" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-y" data-gate="Y">Apply Y</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-y" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>S &mdash; Bonus</h3>
+        <p>A quarter-turn (90&deg;) around the Z axis. Useful for building more complex algorithms; subtle on its own.</p>
+        <div class="bloch-canvas" id="bloch-s" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-s" data-gate="H">Apply H first</button>
+          <button class="gate-btn" data-bloch-target="bloch-s" data-gate="S">Apply S</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-s" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>T &mdash; Bonus</h3>
+        <p>An eighth-turn (45&deg;) around the Z axis. The "T gate" is a key ingredient for universal, fault-tolerant quantum computing.</p>
+        <div class="bloch-canvas" id="bloch-t" style="height:200px;"></div>
+        <div class="gate-buttons">
+          <button class="gate-btn" data-bloch-target="bloch-t" data-gate="H">Apply H first</button>
+          <button class="gate-btn" data-bloch-target="bloch-t" data-gate="T">Apply T</button>
+          <button class="gate-btn reset" data-bloch-target="bloch-t" data-gate="RESET">Reset</button>
+        </div>
+      </div>
+
+    </div>
+
+    <details class="curious">
+      <summary>For the curious: the matrices</summary>
+      <p>No linear algebra is required for this workshop, but if you want the formal definitions:</p>
+      <pre><code class="language-text">X = [[0,1],[1,0]]         Y = [[0,-i],[i,0]]        Z = [[1,0],[0,-1]]
+H = 1/sqrt(2) * [[1,1],[1,-1]]
+S = [[1,0],[0,i]]          T = [[1,0],[0, e^(i*pi/4)]]</code></pre>
+    </details>
+
+    <h2>Seeing This in Qiskit</h2>
+    <p>Qiskit has a built-in plotting function that draws exactly this kind of sphere from a real statevector:</p>
+    <pre><code class="language-python">from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector
+from qiskit.visualization import plot_bloch_multivector
+
+qc = QuantumCircuit(1)
+qc.h(0)  # apply Hadamard -> superposition
+
+state = Statevector.from_instruction(qc)
+plot_bloch_multivector(state)</code></pre>
+    <p>Running this in a notebook renders a static image of the Bloch sphere for your circuit's current state &mdash; the same kind of picture you've been dragging around above, generated from the real math.</p>
+
+    <div class="callout">
+      <strong>Next up:</strong> put this into practice for real. In Chapter 3 we build our first Qiskit circuit and measure it on a simulator.
+    </div>
+
+    <div class="pagenav">
+      <a href="01-why-quantum.html"><small>Back</small>&larr; Why Quantum?</a>
+      <a class="to-next" href="03-hands-on-1-first-circuit.html"><small>Next</small>Hands-On 1: First Circuit &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/bloch.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.__blochInstances = window.__blochInstances || {};
+  ["bloch-main","bloch-x","bloch-h","bloch-z","bloch-y","bloch-s","bloch-t"].forEach(function (id) {
+    window.__blochInstances[id] = EntangleBloch.createBlochSphere(id, { autoSpin: true });
+  });
+</script>

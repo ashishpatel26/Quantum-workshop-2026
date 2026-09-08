@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<title>Why Quantum? &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../prerequisites.html">Prerequisites</a>
+  </nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a class="active" href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 1 &middot; Talk</span>
+    <h1>Why Quantum?</h1>
+    <p class="lede">Classical computers are wonderfully powerful &mdash; and fundamentally limited by how bits work. Quantum computers don't just go faster; they compute differently.</p>
+
+    <h2>The Spinning Coin: Superposition</h2>
+    <p>A classical bit is like a coin lying flat on a table: it's either heads or tails, full stop, and you can look at it any time without changing that fact.</p>
+    <p>A qubit in superposition is like a coin <em>spinning</em> in the air. While it's spinning, it isn't "really" heads or tails &mdash; it's in a blend of both possibilities, with certain odds of landing each way. The moment you slap your hand down and look (measure it), the spinning stops and it collapses to one definite outcome: heads or tails. Before that measurement, though, the spinning coin was doing something a flat coin never could &mdash; existing as a mixture of both states, and quantum algorithms exploit that mixture before it collapses.</p>
+
+    <h2>Linked Coins: Entanglement</h2>
+    <p>Now imagine two coins that are magically linked so that however one lands, the other is <em>guaranteed</em> to land the opposite way &mdash; instantly, even if you take them to opposite sides of the room. Flip one, and you instantly know the other's outcome, without touching it. That's the everyday-language version of entanglement: two qubits sharing a single quantum state, so that measuring one immediately tells you about the other. We'll build this for real with Qiskit in Chapters 4 and 5.</p>
+
+    <h2>Classical CPU vs Quantum Processor</h2>
+    <p>Here's the comparison the whole workshop hangs on: a classical bit is a switch that's either off or on, full stop. A qubit is a point that can sit <em>anywhere</em> on the surface of a sphere &mdash; not just at the two poles.</p>
+
+    <div class="compare-visual">
+      <div class="compare-col">
+        <h3 style="color:var(--accent-2)">Classical Bit</h3>
+        <div class="classical-bit-viz off" id="bitViz">0</div>
+        <p style="color:var(--text-dim);font-size:0.9rem;">An LED that's either off or on. Deterministic. No in-between.</p>
+        <button class="gate-btn" id="flipBitBtn" style="margin-top:0.5rem;">Flip it</button>
+      </div>
+      <div class="compare-vs">VS</div>
+      <div class="compare-col">
+        <h3 style="color:var(--accent-3)">Qubit</h3>
+        <div class="bloch-canvas" id="bloch-intro" style="height:180px;"></div>
+        <p style="color:var(--text-dim);font-size:0.9rem;">A point anywhere on a sphere's surface. Probabilistic until measured. Drag to rotate.</p>
+      </div>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Classical CPU</th><th>Quantum Processor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bit: 0 or 1</td><td>Qubit: superposition of 0 and 1</td></tr>
+        <tr><td>Deterministic operations</td><td>Probabilistic collapse on measurement</td></tr>
+        <tr><td>Transistor logic gates (AND, OR, NOT)</td><td>Unitary quantum gates (X, H, Z, CNOT&hellip;)</td></tr>
+        <tr><td>Parallelism via more cores</td><td>Parallelism via superposition of many states at once</td></tr>
+        <tr><td>Bits are independent</td><td>Qubits can be entangled &mdash; correlated in ways with no classical equivalent</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Why Should You Care? Real Applications</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Drug Discovery</h3>
+        <p>Simulating molecules is exponentially hard classically because you're tracking quantum interactions between electrons. A quantum computer can represent those interactions natively, potentially speeding up the search for new medicines.</p>
+      </div>
+      <div class="card">
+        <h3>Optimization</h3>
+        <p>Logistics, finance portfolios, and scheduling problems often boil down to searching huge solution spaces. Quantum algorithms like Grover's (Chapter 6) offer provable speedups for exactly this kind of unstructured search.</p>
+      </div>
+      <div class="card">
+        <h3>Cryptography</h3>
+        <p>Shor's algorithm (also Chapter 6) can factor large numbers efficiently &mdash; the exact math problem that makes RSA encryption secure today. That's why "quantum-safe" cryptography is already a hot research area.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Coming up:</strong> in Chapter 2 we meet |0&rang; and |1&rang; properly and get hands-on with an interactive 3D Bloch sphere for every core gate.
+    </div>
+
+    <div class="pagenav">
+      <a href="../prerequisites.html"><small>Back</small>&larr; Prerequisites</a>
+      <a class="to-next" href="02-qubits-gates-bloch.html"><small>Next</small>Qubits, Gates &amp; Bloch Sphere &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../assets/bloch.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.__blochInstances = window.__blochInstances || {};
+  window.__blochInstances["bloch-intro"] = EntangleBloch.createBlochSphere("bloch-intro", { autoSpin: true });
+
+  document.getElementById("flipBitBtn").addEventListener("click", function () {
+    const el = document.getElementById("bitViz");
+    if (el.classList.contains("on")) {
+      el.classList.remove("on"); el.classList.add("off"); el.textContent = "0";
+    } else {
+      el.classList.remove("off"); el.classList.add("on"); el.textContent = "1";
+    }
+  });
+</script>

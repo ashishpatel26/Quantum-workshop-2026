@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<title>Hands-On 1: First Circuit &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="02-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a class="active" href="03-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="04-entanglement.html">Entanglement</a></li>
+      <li><a href="05-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="06-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="07-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="08-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="09-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 3 &middot; Hands-On Lab</span>
+    <h1>Your First Quantum Circuit</h1>
+    <p class="lede">Time to leave the pictures behind and run real code. We'll build a 1-qubit circuit, put it in superposition, measure it, and see the randomness for ourselves.</p>
+
+    <h2>The Full Code</h2>
+    <pre><code class="language-python">from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+# 1. Build a circuit with 1 qubit and 1 classical bit
+qc = QuantumCircuit(1, 1)
+
+# 2. Apply a Hadamard gate -> equal superposition of |0> and |1>
+qc.h(0)
+
+# 3. Measure the qubit into the classical bit
+qc.measure(0, 0)
+
+# 4. Run it on the Aer simulator, many times ("shots")
+simulator = AerSimulator()
+result = simulator.run(qc, shots=1000).result()
+counts = result.get_counts()
+
+print(counts)          # e.g. {'0': 493, '1': 507}
+plot_histogram(counts)</code></pre>
+
+    <h2>Line by Line</h2>
+    <div class="grid">
+      <div class="card">
+        <h3><code>QuantumCircuit(1, 1)</code></h3>
+        <p>Creates a circuit with 1 qubit (starts at |0&rang;) and 1 classical bit to store the measurement result.</p>
+      </div>
+      <div class="card">
+        <h3><code>qc.h(0)</code></h3>
+        <p>Applies the Hadamard gate to qubit 0 &mdash; the same gate from Chapter 2 that rotates the state onto the equator, creating a 50/50 superposition.</p>
+      </div>
+      <div class="card">
+        <h3><code>qc.measure(0, 0)</code></h3>
+        <p>Measures qubit 0 and writes the result (0 or 1) into classical bit 0. This is the moment the "spinning coin" collapses.</p>
+      </div>
+      <div class="card">
+        <h3><code>AerSimulator()</code></h3>
+        <p>Qiskit's local, high-performance simulator &mdash; runs the circuit as if it were a real quantum computer, without needing actual quantum hardware.</p>
+      </div>
+      <div class="card">
+        <h3><code>simulator.run(qc, shots=1000)</code></h3>
+        <p>Runs the circuit 1000 times ("shots"). Because measurement is probabilistic, we repeat it many times to see the statistics.</p>
+      </div>
+      <div class="card">
+        <h3><code>result.get_counts()</code></h3>
+        <p>Returns a dictionary counting how many times each outcome ('0' or '1') occurred across all 1000 shots.</p>
+      </div>
+    </div>
+
+    <h2>Expected Result: ~50/50 Split</h2>
+    <p>Because a Hadamard gate creates an equal superposition, each shot has a 50% chance of measuring 0 and a 50% chance of measuring 1. Across 1000 shots you'll typically see something close to 500/500 &mdash; never exactly 500/500 (it's genuinely random), but always hovering around the midpoint.</p>
+
+    <div class="histogram" id="hist1">
+      <div class="hist-bar-col">
+        <div class="hist-pct">~50%</div>
+        <div class="hist-bar" id="bar0" style="height:0"></div>
+        <div class="hist-label">'0'</div>
+      </div>
+      <div class="hist-bar-col">
+        <div class="hist-pct">~50%</div>
+        <div class="hist-bar" id="bar1" style="height:0"></div>
+        <div class="hist-label">'1'</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Why not exactly 50/50?</strong> Each shot is an independent random event, like flipping a fair coin 1000 times &mdash; you'll get close to 500 heads, but statistical noise means it's rarely exact. Run it again and you'll get a slightly different split.
+    </div>
+
+    <div class="callout success">
+      <strong>Try it yourself:</strong> change <code>shots=1000</code> to <code>shots=10</code> and re-run. With fewer shots, the split will wobble much further from 50/50 &mdash; a nice illustration of the law of large numbers.
+    </div>
+
+    <div class="pagenav">
+      <a href="02-qubits-gates-bloch.html"><small>Back</small>&larr; Qubits, Gates &amp; Bloch Sphere</a>
+      <a class="to-next" href="04-entanglement.html"><small>Next</small>Entanglement &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      document.getElementById("bar0").style.height = "83%";
+      document.getElementById("bar1").style.height = "80%";
+    }, 200);
+  });
+</script>

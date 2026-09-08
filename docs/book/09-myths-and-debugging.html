@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<title>Myths &amp; Debugging &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a><a href="../presentation/entangle-workshop.html">Slides</a><a href="../notebook/index.html">Notebook</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-interference-and-phase.html">Interference &amp; Phase</a></li>
+      <li><a href="08-noise-and-real-hardware.html">Noise &amp; Real Hardware</a></li>
+      <li><a class="active" href="09-myths-and-debugging.html">Myths &amp; Debugging</a></li>
+      <li><a href="10-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="11-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="12-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="13-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 9 &middot; Talk</span>
+    <h1>Myths &amp; Debugging</h1>
+    <p class="lede">Four popular ideas about quantum computing that are worth unlearning &mdash; and a practical checklist for when your circuit does something you did not expect.</p>
+
+    <h2 class="section-title">Four Myths to Leave Behind</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Myth 1: "It tries every answer at once"</h3>
+        <p><strong>The claim:</strong> a quantum computer puts all possible answers into superposition, evaluates them all simultaneously, and reads out the right one.</p>
+        <p><strong>The reality:</strong> the first half is roughly true and the second half is where it falls apart. You <em>can</em> get all inputs into superposition &mdash; but measurement returns exactly <em>one</em> outcome, chosen at random by the probabilities. If that were all there was, you would have an extremely expensive random guesser.</p>
+        <p>What a real algorithm does is engineer <em>interference</em> (Chapter 7): arrange the phases so the routes to wrong answers cancel and the routes to the right answer reinforce. The parallelism is real; the free readout of all results is not. The whole art is in making the answer you want <em>likely</em>.</p>
+      </div>
+
+      <div class="card">
+        <h3>Myth 2: "A qubit is just a random bit"</h3>
+        <p><strong>The claim:</strong> superposition is only ignorance &mdash; a coin spinning in the air that is secretly already heads or tails, and we just have not looked.</p>
+        <p><strong>The reality:</strong> a hidden-but-definite value cannot reproduce what qubits do. The H&rarr;Z&rarr;H demo settles it: both circuits pass through the same 50/50 state, yet one ends at a certain 0 and the other at a certain 1. A coin that was "secretly heads all along" has no mechanism to produce that difference.</p>
+        <p>The extra ingredient is <strong>phase</strong>, and it has no classical counterpart. Amplitudes can cancel; probabilities never can. That is precisely why entanglement violates Bell inequalities &mdash; a fact confirmed experimentally and recognised with the 2022 Nobel Prize in Physics.</p>
+      </div>
+
+      <div class="card">
+        <h3>Myth 3: "They'll replace ordinary computers"</h3>
+        <p><strong>The claim:</strong> quantum computers are the next generation of computer, and eventually your laptop and phone will be quantum.</p>
+        <p><strong>The reality:</strong> they are <em>specialised accelerators</em>, not general-purpose replacements. A quantum computer offers an advantage only where a problem has structure an interference pattern can exploit &mdash; unstructured search, factoring, simulating quantum chemistry and materials, certain optimization and sampling tasks.</p>
+        <p>For sorting a list, serving a web page, rendering video, or running a spreadsheet, a classical CPU is not merely adequate &mdash; it is dramatically better. Expect quantum processors to sit alongside CPUs and GPUs as another cloud-attached accelerator, called on for the narrow slice of work they are good at.</p>
+      </div>
+
+      <div class="card">
+        <h3>Myth 4: "Entanglement sends signals faster than light"</h3>
+        <p><strong>The claim:</strong> measuring one entangled qubit instantly affects its partner light-years away, so you could use it to communicate instantaneously.</p>
+        <p><strong>The reality:</strong> the correlation is real, but it carries no signal. Your own measurement outcome is completely random &mdash; you cannot <em>choose</em> to get a 0 rather than a 1. Your partner, looking only at their own results, sees an ordinary random sequence with no way to tell whether you measured, when, or what you got.</p>
+        <p>The correlation only becomes visible when the two of you <em>compare notes</em> over an ordinary classical channel &mdash; a phone call, an email &mdash; and that channel is stuck at the speed of light like everything else. Physicists call this the no-communication theorem. Entanglement is beautifully strange; it is not a telegraph.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>A useful one-line summary:</strong> quantum computing is not about doing everything at once. It is about choreographing amplitudes so that the wrong answers destroy each other and the right one survives.
+    </div>
+
+    <h2 class="section-title">When Your Circuit Misbehaves</h2>
+    <p>Quantum circuits fail in ways classical code does not, and the usual instinct &mdash; add a print statement in the middle &mdash; is precisely what you cannot do, because looking collapses the state. Work through this list in order.</p>
+
+    <ol>
+      <li><strong>Does the import even work?</strong> <code>from qiskit_aer import AerSimulator</code> lives in the separate <code>qiskit-aer</code> package, not in <code>qiskit</code>. An <code>ImportError</code> here usually means a missing install or two Qiskit versions fighting in the same environment.</li>
+      <li><strong>Did you allocate enough qubits <em>and</em> classical bits?</strong> <code>QuantumCircuit(2)</code> gives you two qubits and <em>zero</em> classical bits, so there is nowhere for measurement results to land. For a measured circuit you almost always want <code>QuantumCircuit(2, 2)</code>.</li>
+      <li><strong>Did you actually measure?</strong> Asking for <code>get_counts()</code> on a circuit with no measure instruction is the single most common beginner error. No measurement means no counts.</li>
+      <li><strong>What state <em>should</em> exist just before the measurement?</strong> Delete the measure lines, run <code>Statevector.from_instruction(qc)</code>, and look. This is the closest thing to a debugger you get &mdash; and it works only on a simulator, which is one very good reason to develop there.</li>
+      <li><strong>Are you confusing amplitude with probability?</strong> An amplitude of 0.707 is a probability of 0.5, not 0.707. Square the magnitude. Amplitudes can be negative or complex; probabilities are never either.</li>
+      <li><strong>Did a phase gate change the phase but not the probabilities?</strong> Z, S and T leave the measurement statistics in the Z basis completely untouched. If you added one and the histogram did not budge, that is correct behaviour &mdash; the effect only appears after a later H lets the paths interfere (Chapter 7).</li>
+      <li><strong>Are you misreading the bit order?</strong> Qiskit prints the highest classical-bit index on the left. <code>'01'</code> means c[1]=0, c[0]=1. If your result looks exactly backwards, it probably is &mdash; see Chapter 7.</li>
+      <li><strong>Is the discrepancy just sampling noise?</strong> With 100 shots, a true 50/50 split routinely lands at 44/56. That is not a bug; it is statistics. Raise the shot count before you go hunting for a cause.</li>
+      <li><strong>Are you comparing an ideal run against a noisy one?</strong> Extra outcomes that "should be impossible" and a general blurring of the histogram are the signature of a noise model or real hardware (Chapter 8), not of a logic error in your circuit.</li>
+      <li><strong>Are you looking at the logical circuit or the transpiled one?</strong> <code>transpile()</code> rewrites your gates into the backend's native set and may reorder or remap qubits entirely. If the drawing surprises you, check which version you are drawing.</li>
+    </ol>
+
+    <h2>A Diagnostic Helper</h2>
+    <p>Paste this into your notebook and call it whenever a circuit is not doing what you expect. It answers most of the questions above in one shot.</p>
+
+    <pre><code class="language-python">def diagnose(circuit, name="circuit"):
+    """Print the basic facts about a Qiskit circuit, then draw it."""
+    print(f"--- {name} ---")
+    print("qubits        :", circuit.num_qubits)
+    print("classical bits:", circuit.num_clbits)
+    print("depth         :", circuit.depth())
+    print("operations    :", dict(circuit.count_ops()))
+
+    if circuit.num_clbits == 0:
+        print("WARNING: no classical bits - get_counts() will fail.")
+    if "measure" not in circuit.count_ops():
+        print("WARNING: no measurement - get_counts() will fail.")
+
+    print(circuit.draw(output="text"))
+    return circuit
+
+
+# Example use
+from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 2)
+qc.h(0)
+qc.cx(0, 1)
+qc.measure([0, 1], [0, 1])
+
+diagnose(qc, "bell state")</code></pre>
+
+    <div class="callout success">
+      <strong>And when the circuit is genuinely fine:</strong> drop the measurements and inspect the statevector directly. On a simulator you can see every amplitude and phase &mdash; the one debugging superpower real hardware will never give you.
+    </div>
+
+    <pre><code class="language-python">from qiskit.quantum_info import Statevector
+
+qc_nm = QuantumCircuit(2)     # same circuit, no measurement
+qc_nm.h(0)
+qc_nm.cx(0, 1)
+
+print(Statevector.from_instruction(qc_nm))
+# amplitudes: 0.707 on |00>, 0.707 on |11>, zero elsewhere</code></pre>
+
+    <div class="callout">
+      <strong>Coming up:</strong> with the myths cleared away and a debugging routine in hand, Chapter 10 looks at the two algorithms everyone has heard of &mdash; Grover's and Shor's &mdash; and what they really do.
+    </div>
+
+    <div class="pagenav">
+      <a href="08-noise-and-real-hardware.html"><small>Back</small>&larr; Noise &amp; Real Hardware</a>
+      <a class="to-next" href="10-real-algorithms.html"><small>Next</small>Real Algorithms &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>

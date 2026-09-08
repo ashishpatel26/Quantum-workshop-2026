@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<title>Interference &amp; Phase &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a><a href="../presentation/entangle-workshop.html">Slides</a><a href="../notebook/index.html">Notebook</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a class="active" href="07-interference-and-phase.html">Interference &amp; Phase</a></li>
+      <li><a href="08-noise-and-real-hardware.html">Noise &amp; Real Hardware</a></li>
+      <li><a href="09-myths-and-debugging.html">Myths &amp; Debugging</a></li>
+      <li><a href="10-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="11-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="12-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="13-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 7 &middot; Talk</span>
+    <h1>Interference &amp; Phase</h1>
+    <p class="lede">Superposition alone is not what makes a quantum computer powerful. The real engine is <em>interference</em> &mdash; and interference is driven by something measurement can never show you directly: phase.</p>
+
+    <h2>What Phase Actually Is</h2>
+    <p>So far we have described a qubit by how likely it is to measure as 0 or 1. That is only half the story. Each of the two possibilities carries an <strong>amplitude</strong>, and an amplitude has not only a size but also a <em>direction</em> &mdash; a kind of timing or orientation. That extra direction is called the <strong>phase</strong>.</p>
+    <p>Think of two identical waves. If they line up crest-to-crest, they add and get bigger. If one is shifted so its crest meets the other's trough, they cancel to nothing. The waves are the same size either way; what changed is their relative timing. Phase is that timing, attached to each amplitude of a quantum state.</p>
+
+    <div class="callout">
+      <strong>The catch:</strong> if you simply measure a qubit, phase is invisible. Two states with identical measurement probabilities but different phases give you exactly the same 50/50 statistics. Phase only reveals itself when you let paths <em>recombine</em> &mdash; that is, when you apply another gate and let the amplitudes interfere.
+    </div>
+
+    <h2>The Demo: H &rarr; H versus H &rarr; Z &rarr; H</h2>
+    <p>Here is the cleanest possible demonstration in all of quantum computing, and it fits in three gates.</p>
+    <ol>
+      <li>Start a single qubit in |0&rang;.</li>
+      <li>Apply <strong>H</strong>. The qubit is now in an equal superposition: measuring here would give 0 half the time and 1 half the time.</li>
+      <li>Now either apply <strong>H</strong> again immediately, or insert a <strong>Z</strong> gate first and then the second H.</li>
+      <li>Measure.</li>
+    </ol>
+    <p>The two circuits pass through what looks like the <em>same</em> 50/50 superposition in the middle. Yet:</p>
+    <ul>
+      <li><code>H &rarr; H</code> returns <strong>|0&rang; with certainty</strong> &mdash; 100% of shots read <code>0</code>.</li>
+      <li><code>H &rarr; Z &rarr; H</code> returns <strong>|1&rang; with certainty</strong> &mdash; 100% of shots read <code>1</code>.</li>
+    </ul>
+    <p>Nothing random survives. Two circuits whose midpoints have identical measurement statistics end in opposite, perfectly certain outcomes. The only difference between them is a phase.</p>
+
+    <h2>Run It Yourself</h2>
+    <pre><code class="language-python">from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+sim = AerSimulator()
+
+# Circuit A: H -> H   (no phase flip)
+qc_a = QuantumCircuit(1, 1)
+qc_a.h(0)
+qc_a.h(0)
+qc_a.measure(0, 0)
+
+# Circuit B: H -> Z -> H   (phase flip in the middle)
+qc_b = QuantumCircuit(1, 1)
+qc_b.h(0)
+qc_b.z(0)          # flips the sign of the |1> amplitude
+qc_b.h(0)
+qc_b.measure(0, 0)
+
+counts_a = sim.run(transpile(qc_a, sim), shots=1000).result().get_counts()
+counts_b = sim.run(transpile(qc_b, sim), shots=1000).result().get_counts()
+
+print("H -> H     :", counts_a)   # {'0': 1000}
+print("H -> Z -> H:", counts_b)   # {'1': 1000}
+
+plot_histogram([counts_a, counts_b], legend=["H-H", "H-Z-H"])</code></pre>
+
+    <h2>The Two Results, Side by Side</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>H &rarr; H</h3>
+        <div class="histogram">
+          <div class="hist-bar-col">
+            <div class="hist-pct">100%</div>
+            <div class="hist-bar interf-bar" id="ihh0" style="height:0"></div>
+            <div class="hist-label">'0'</div>
+          </div>
+          <div class="hist-bar-col">
+            <div class="hist-pct">0%</div>
+            <div class="hist-bar" style="height:2px;opacity:0.3;"></div>
+            <div class="hist-label">'1'</div>
+          </div>
+        </div>
+        <p>The two paths to |0&rang; add together; the two paths to |1&rang; cancel.</p>
+      </div>
+      <div class="card">
+        <h3>H &rarr; Z &rarr; H</h3>
+        <div class="histogram">
+          <div class="hist-bar-col">
+            <div class="hist-pct">0%</div>
+            <div class="hist-bar" style="height:2px;opacity:0.3;"></div>
+            <div class="hist-label">'0'</div>
+          </div>
+          <div class="hist-bar-col">
+            <div class="hist-pct">100%</div>
+            <div class="hist-bar interf-bar" id="ihzh1" style="height:0"></div>
+            <div class="hist-label">'1'</div>
+          </div>
+        </div>
+        <p>The Z flipped one sign, so now |1&rang; adds and |0&rang; cancels.</p>
+      </div>
+    </div>
+
+    <h2>Why It Happens</h2>
+    <p>After the first H, the qubit holds two amplitudes &mdash; one attached to |0&rang; and one attached to |1&rang; &mdash; both the same size, both pointing the same way.</p>
+    <p>The <strong>Z gate leaves |0&rang; alone and flips the sign of the |1&rang; amplitude.</strong> That is a pure phase change: the sizes are untouched, so if you measured right there you would still see a flat 50/50. Nothing observable has changed &mdash; yet.</p>
+    <p>The second H is where the payoff lands. H takes each of the two amplitudes and spreads it across <em>both</em> outcomes, so every final outcome is reached by two different routes. Those routes then add:</p>
+    <ul>
+      <li><strong>Without the Z:</strong> the two routes into |0&rang; point the same way and reinforce (constructive interference), while the two routes into |1&rang; point opposite ways and annihilate (destructive interference). Result: certain |0&rang;.</li>
+      <li><strong>With the Z:</strong> the sign flip swaps which pair reinforces and which cancels. Result: certain |1&rang;.</li>
+    </ul>
+
+    <div class="callout success">
+      <strong>This is the real mechanism behind quantum speedups.</strong> A quantum computer does not "try every answer at once and read them all out" &mdash; you only ever get one measurement result. What an algorithm does is arrange the phases so that the routes leading to <em>wrong</em> answers cancel each other out, while the routes leading to the <em>right</em> answer reinforce. Superposition supplies the routes; interference does the computing.
+    </div>
+
+    <div class="callout">
+      <strong>Looking ahead:</strong> Grover's algorithm (Chapter 10, built by hand in Chapter 11) is exactly this trick scaled up. Its "oracle" step flips the phase of the marked answer &mdash; just like the Z above &mdash; and its diffusion step is the interference stage that converts that invisible phase flip into a visible probability. Everything you just saw with one qubit is the whole idea.
+    </div>
+
+    <details class="curious">
+      <summary>For the curious: the matrices</summary>
+      <p>None of this is needed to follow the chapter, but if you want to check the arithmetic by hand:</p>
+      <pre><code class="language-text">H = 1/sqrt(2) * [[1,  1],
+                 [1, -1]]
+
+Z =             [[1,  0],
+                 [0, -1]]
+
+|0> = [1, 0]
+
+H|0>      = (1/sqrt(2)) [1,  1]      -> 50/50, both amplitudes positive
+ZH|0>     = (1/sqrt(2)) [1, -1]      -> still 50/50, but the sign flipped
+H H |0>   = [1, 0] = |0>             -> certain 0
+H Z H |0> = [0, 1] = |1>             -> certain 1</code></pre>
+      <p>Note that H&middot;H is the identity matrix &mdash; H is its own inverse. Inserting Z between the two H gates turns "undo what you just did" into "do the opposite."</p>
+    </details>
+
+    <h2 class="section-title">A Practical Gotcha: How Qiskit Prints Bits</h2>
+    <p>Before you go interpreting histograms, one convention will trip you up at least once. When Qiskit prints a multi-bit result string, it puts the <strong>highest classical-bit index on the LEFT</strong> and the lowest on the right &mdash; the opposite of the reading order most people assume.</p>
+
+    <h3>A Worked Example</h3>
+    <pre><code class="language-python">from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+
+qc = QuantumCircuit(2, 2)
+qc.x(0)                  # flip qubit 0 only; qubit 1 stays |0>
+qc.measure([0, 1], [0, 1])
+
+sim = AerSimulator()
+print(sim.run(transpile(qc, sim), shots=100).result().get_counts())
+# {'01': 100}   <-- NOT '10'</code></pre>
+    <p>We flipped qubit <strong>0</strong>, so you might expect the string <code>'10'</code> &mdash; "first qubit is 1." Qiskit prints <code>'01'</code> instead. Read the string right-to-left:</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Position in the printed string <code>'01'</code></th><th>Character</th><th>Which classical bit</th><th>Which qubit measured into it</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Left</td><td><code>0</code></td><td>c[1]</td><td>qubit 1 (never flipped)</td></tr>
+        <tr><td>Right</td><td><code>1</code></td><td>c[0]</td><td>qubit 0 (we applied X)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <strong>Why this matters for Bell states:</strong> a Bell state only ever produces <code>'00'</code> and <code>'11'</code>, which are symmetric, so the ordering never bites you there. The moment you build a circuit where the qubits <em>disagree</em>, <code>'01'</code> versus <code>'10'</code> becomes the difference between "my circuit works" and "my circuit is backwards." Many hours have been lost to this.
+    </div>
+
+    <div class="callout success">
+      <strong>Habit to adopt now:</strong> whenever you print or plot counts, say out loud (or in a comment) what each character means &mdash; for example <code># bits printed as c1 c0; c0 is the coin qubit</code>. Stating it explicitly costs one line and removes the ambiguity permanently. Qiskit's <code>plot_histogram</code> uses this same ordering on its axis labels.
+    </div>
+
+    <div class="pagenav">
+      <a href="06-hands-on-2-bell-state.html"><small>Back</small>&larr; Hands-On 2: Bell State</a>
+      <a class="to-next" href="08-noise-and-real-hardware.html"><small>Next</small>Noise &amp; Real Hardware &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      document.getElementById("ihh0").style.height = "90%";
+      document.getElementById("ihzh1").style.height = "90%";
+    }, 200);
+  });
+</script>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<title>Noise &amp; Real Hardware &mdash; Entangle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<header class="topnav">
+  <a class="brand" href="../index.html"><span class="dot"></span> Entangle</a>
+  <nav><a href="../index.html">Home</a><a href="../prerequisites.html">Prerequisites</a><a href="../presentation/entangle-workshop.html">Slides</a><a href="../notebook/index.html">Notebook</a></nav>
+</header>
+
+<div class="book-layout">
+  <aside class="sidebar">
+    <button class="sidebar-toggle">&#9776; Chapters</button>
+    <h4>Workshop Book</h4>
+    <ol>
+      <li><a href="01-history-and-machines.html">History &amp; Machines</a></li>
+      <li><a href="02-why-quantum.html">Why Quantum?</a></li>
+      <li><a href="03-qubits-gates-bloch.html">Qubits, Gates &amp; Bloch Sphere</a></li>
+      <li><a href="04-hands-on-1-first-circuit.html">Hands-On 1: First Circuit</a></li>
+      <li><a href="05-entanglement.html">Entanglement</a></li>
+      <li><a href="06-hands-on-2-bell-state.html">Hands-On 2: Bell State</a></li>
+      <li><a href="07-interference-and-phase.html">Interference &amp; Phase</a></li>
+      <li><a class="active" href="08-noise-and-real-hardware.html">Noise &amp; Real Hardware</a></li>
+      <li><a href="09-myths-and-debugging.html">Myths &amp; Debugging</a></li>
+      <li><a href="10-real-algorithms.html">Real Algorithms</a></li>
+      <li><a href="11-hands-on-3-grovers.html">Hands-On 3: Grover's Search</a></li>
+      <li><a href="12-capstone-qrng.html">Capstone: Quantum RNG</a></li>
+      <li><a href="13-where-next.html">Where to Go Next</a></li>
+    </ol>
+  </aside>
+
+  <main class="book-content">
+    <span class="kicker">Chapter 8 &middot; Talk</span>
+    <h1>Noise &amp; Real Hardware</h1>
+    <p class="lede">Every circuit you have run so far was perfect &mdash; because the simulator is perfect. Real quantum hardware is not. This chapter is the reality check.</p>
+
+    <h2>The Lie of Omission</h2>
+    <p>When you ran the Bell state in Chapter 6 and saw a clean split between <code>'00'</code> and <code>'11'</code> with nothing else, that was true &mdash; of an idealised mathematical model. An actual quantum processor is a physical object: superconducting circuits chilled to a few thousandths of a degree above absolute zero, or trapped ions held by lasers. Physical objects leak, drift, and get nudged by their surroundings.</p>
+    <p>The simulator is not lying to you, but it is quietly leaving something out. On real hardware, that same Bell circuit produces a few percent of <code>'01'</code> and <code>'10'</code> &mdash; outcomes that are supposed to be impossible.</p>
+
+    <h2>The Four Ways Things Go Wrong</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Relaxation (T1)</h3>
+        <p>A qubit in |1&rang; holds more energy than one in |0&rang;, and nature prefers low energy. Left alone, the qubit gradually leaks that energy into its surroundings and decays toward |0&rang;. The characteristic time this takes is called <strong>T1</strong>. If your circuit takes longer than T1, your |1&rang; quietly becomes a |0&rang; before you ever measure it.</p>
+      </div>
+      <div class="card">
+        <h3>Dephasing (T2)</h3>
+        <p>The qubit keeps its 0-versus-1 balance but loses track of its <em>phase</em> &mdash; the very quantity Chapter 7 showed was doing all the real work. Stray fields and tiny frequency wobbles scramble the timing. The timescale is called <strong>T2</strong>. Once phase is gone, interference no longer works, and the qubit degrades into something that behaves like an ordinary random bit.</p>
+      </div>
+      <div class="card">
+        <h3>Gate Error</h3>
+        <p>A gate is applied by firing a precisely shaped microwave or laser pulse. Shape it 1% wrong and you get a rotation of 179&deg; instead of 180&deg;. Each gate is <em>almost</em> the one you asked for, and the small discrepancies accumulate across the circuit. Two-qubit gates like CNOT are typically an order of magnitude noisier than single-qubit gates.</p>
+      </div>
+      <div class="card">
+        <h3>Readout Error</h3>
+        <p>Even a qubit that survived the whole circuit perfectly can be misread. Measurement distinguishes two very faint signals, and sometimes a genuine 0 is reported as a 1 or vice versa. This one is purely a reporting error &mdash; the state was fine; the classical bit you got back was not.</p>
+      </div>
+    </div>
+
+    <h2>Simulating Noise Yourself</h2>
+    <p>You do not need access to a real device to see this. Qiskit Aer lets you attach a <strong>noise model</strong> to the simulator, so you can run the identical circuit ideally and noisily and compare the two histograms directly.</p>
+
+    <pre><code class="language-python">from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel, depolarizing_error
+from qiskit.visualization import plot_histogram
+
+# The same Bell circuit from Chapter 6
+qc = QuantumCircuit(2, 2)
+qc.h(0)
+qc.cx(0, 1)
+qc.measure([0, 1], [0, 1])
+
+# --- 1. Ideal run ---
+ideal_sim = AerSimulator()
+ideal_counts = ideal_sim.run(transpile(qc, ideal_sim), shots=2000).result().get_counts()
+
+# --- 2. Build a noise model ---
+noise_model = NoiseModel()
+# 2% depolarizing error on every 1-qubit 'h' gate
+noise_model.add_all_qubit_quantum_error(depolarizing_error(0.02, 1), ["h"])
+# 5% depolarizing error on every 2-qubit 'cx' gate (2-qubit gates are noisier)
+noise_model.add_all_qubit_quantum_error(depolarizing_error(0.05, 2), ["cx"])
+
+# --- 3. Noisy run ---
+noisy_sim = AerSimulator(noise_model=noise_model)
+noisy_counts = noisy_sim.run(transpile(qc, noisy_sim), shots=2000).result().get_counts()
+
+print("ideal:", ideal_counts)   # {'00': ~1000, '11': ~1000}
+print("noisy:", noisy_counts)   # {'00': ~960, '11': ~955, '01': ~45, '10': ~40}
+
+plot_histogram([ideal_counts, noisy_counts], legend=["ideal", "noisy"])</code></pre>
+
+    <div class="callout">
+      <strong>What is "depolarizing" error?</strong> It is the simplest useful stand-in for "something went wrong here." With some probability, the gate discards the qubit's actual state and replaces it with a completely random one. It is not a faithful model of any specific physical mechanism, but it captures the essential effect &mdash; a bit of the quantum information is destroyed at every gate &mdash; and it is the standard first noise model to reach for.
+    </div>
+
+    <h2>What You Will See</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Ideal Bell State</h3>
+        <div class="histogram">
+          <div class="hist-bar-col"><div class="hist-pct">~50%</div><div class="hist-bar nz-bar" id="nzI00" style="height:0"></div><div class="hist-label">'00'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">0%</div><div class="hist-bar" style="height:2px;opacity:0.3;"></div><div class="hist-label">'01'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">0%</div><div class="hist-bar" style="height:2px;opacity:0.3;"></div><div class="hist-label">'10'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">~50%</div><div class="hist-bar nz-bar" id="nzI11" style="height:0"></div><div class="hist-label">'11'</div></div>
+        </div>
+        <p>Perfect correlation. The two qubits <em>always</em> agree.</p>
+      </div>
+      <div class="card">
+        <h3>Noisy Bell State</h3>
+        <div class="histogram">
+          <div class="hist-bar-col"><div class="hist-pct">~48%</div><div class="hist-bar nz-bar" id="nzN00" style="height:0"></div><div class="hist-label">'00'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">~2%</div><div class="hist-bar nz-bar" id="nzN01" style="height:0"></div><div class="hist-label">'01'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">~2%</div><div class="hist-bar nz-bar" id="nzN10" style="height:0"></div><div class="hist-label">'10'</div></div>
+          <div class="hist-bar-col"><div class="hist-pct">~48%</div><div class="hist-bar nz-bar" id="nzN11" style="height:0"></div><div class="hist-label">'11'</div></div>
+        </div>
+        <p>Small but real <code>'01'</code> and <code>'10'</code> bars &mdash; the correlation has been chipped away.</p>
+      </div>
+    </div>
+    <p>Those two little bars are the whole story of NISQ-era quantum computing. They are the visible proof that noise erodes exactly the correlation the algorithm depends on. Deepen the circuit &mdash; more gates, more CNOTs &mdash; and the errors compound until the signal is buried and the histogram approaches uniform noise.</p>
+
+    <h2>Simulator versus Real QPU</h2>
+    <table class="compare-table">
+      <thead>
+        <tr><th></th><th>Aer Simulator</th><th>Real Quantum Processor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Execution substrate</strong></td><td>Classical CPU doing linear algebra on your laptop</td><td>Physical qubits: superconducting circuits near absolute zero, or trapped ions</td></tr>
+        <tr><td><strong>Noise</strong></td><td>None by default; you can opt in to a model</td><td>Always present, drifts day to day, must be recalibrated</td></tr>
+        <tr><td><strong>Inspect the statevector?</strong></td><td>Yes &mdash; every amplitude and phase is readable at any point</td><td>No. Measurement collapses the state; you only ever get counts</td></tr>
+        <tr><td><strong>Scaling</strong></td><td>Memory doubles with every qubit &mdash; roughly 30 qubits is a laptop's practical ceiling</td><td>Scales naturally with qubit count, but coherence and error rates become the real limit</td></tr>
+        <tr><td><strong>Repeatability</strong></td><td>Deterministic given a seed; identical results every run</td><td>Varies between runs and between calibration cycles</td></tr>
+        <tr><td><strong>Cost &amp; access</strong></td><td>Free, instant, offline</td><td>Cloud queue; time on the device is a scarce shared resource</td></tr>
+        <tr><td><strong>Best used for</strong></td><td>Learning, developing, debugging, verifying an algorithm is correct in principle</td><td>Genuine quantum-hardware research and benchmarking what today's devices can actually do</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <strong>Honest framing.</strong> We are in what the field calls the NISQ era &mdash; Noisy Intermediate-Scale Quantum. Today's machines have enough qubits to be interesting and far too much noise to be trustworthy for deep circuits. <em>Fault-tolerant</em> quantum computing &mdash; where many physical qubits are bundled into one reliable logical qubit through error correction &mdash; is a real and active engineering programme, but it is still ahead of us, not behind us.
+    </div>
+
+    <div class="callout success">
+      <strong>Which is why this workshop uses a simulator.</strong> When you are learning the ideas, you want the results to reflect <em>your circuit</em>, not the calibration drift of a fridge in another country. Learn the algorithm on a clean simulator first; add a noise model when you want to know how it would survive contact with real hardware.
+    </div>
+
+    <div class="pagenav">
+      <a href="07-interference-and-phase.html"><small>Back</small>&larr; Interference &amp; Phase</a>
+      <a class="to-next" href="09-myths-and-debugging.html"><small>Next</small>Myths &amp; Debugging &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer>Entangle: Quantum Computing 101 with Qiskit</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="../assets/main.js"></script>
+<script src="../assets/quantum-fx.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      var heights = { nzI00: "85%", nzI11: "85%", nzN00: "82%", nzN01: "6%", nzN10: "6%", nzN11: "82%" };
+      Object.keys(heights).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.height = heights[id];
+      });
+    }, 200);
+  });
+</script>

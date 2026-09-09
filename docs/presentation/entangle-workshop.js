@@ -500,7 +500,7 @@
     size(); addEventListener('resize', size); draw();
   }
 
-  function makeRenderer(host, cameraZ = 6) {
+  function makeRenderer(host, cameraZ = 6, spinAxis = 'y') {
     const THREE = window.THREE;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -521,7 +521,9 @@
     host.addEventListener('pointerdown', (event) => { dragging = true; lastX = event.clientX; lastY = event.clientY; host.setPointerCapture(event.pointerId); });
     host.addEventListener('pointermove', (event) => {
       if (!dragging) return;
-      group.rotation.y += (event.clientX - lastX) * .009;
+      // spinAxis names the group axis that points "up" on screen, so a
+      // horizontal drag turns the model instead of tumbling it.
+      group.rotation[spinAxis] += (event.clientX - lastX) * .009;
       group.rotation.x += (event.clientY - lastY) * .006;
       lastX = event.clientX; lastY = event.clientY;
     });
@@ -779,7 +781,7 @@
 
   function buildBloch(id, initial) {
     const THREE = window.THREE;
-    const c = makeRenderer($(`#${id}`), 4.35);
+    const c = makeRenderer($(`#${id}`), 4.35, 'z');
     c.camera.position.set(3.15, 2.2, 3.75);
     c.camera.lookAt(0, 0, 0);
     let vector = gateMath.normalize(initial);
@@ -801,12 +803,37 @@
       const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-x * 1.65, -y * 1.65, -z * 1.65), new THREE.Vector3(x * 1.65, y * 1.65, z * 1.65)]);
       c.group.add(new THREE.Line(geometry, new THREE.LineBasicMaterial({ color, transparent: true, opacity: .62 })));
     });
+    // Axis labels so the direction of each rotation axis is readable at a glance.
+    const axisLabel = (text, position, color) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.font = 'bold 76px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = color;
+      ctx.fillText(text, 64, 64);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(canvas), transparent: true, depthTest: false
+      }));
+      sprite.scale.set(.42, .42, .42);
+      sprite.position.set(...position);
+      c.group.add(sprite);
+    };
+    axisLabel('x', [1.9, 0, 0], '#22d3ee');
+    axisLabel('y', [0, 1.9, 0], '#f472b6');
+    axisLabel('|0⟩', [0, 0, 1.86], '#fbbf24');
+    axisLabel('|1⟩', [0, 0, -1.86], '#fbbf24');
     const arrow = new THREE.ArrowHelper(new THREE.Vector3(...vector), new THREE.Vector3(0, 0, 0), 1.52, 0xffffff, .22, .11);
     c.group.add(arrow);
     const tip = new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 16), new THREE.MeshBasicMaterial({ color: 0xffffff })); c.group.add(tip);
     const north = new THREE.Mesh(new THREE.SphereGeometry(.045, 12, 12), new THREE.MeshBasicMaterial({ color: 0xfbbf24 })); north.position.z = 1.38; c.group.add(north);
     const south = north.clone(); south.position.z = -1.38; c.group.add(south);
-    c.group.rotation.x = -.22; c.group.rotation.y = -.42;
+    // Bloch convention puts |0>/|1> on +z/-z, but Three.js screen-up is +y.
+    // Tilt the group back so the poles read as vertical, then swing slightly
+    // for a three-quarter view of the x and y axes.
+    c.group.rotation.x = -Math.PI / 2 + .22;
+    c.group.rotation.z = -.42;
     const sync = () => {
       const direction = new THREE.Vector3(...vector);
       arrow.setDirection(direction); tip.position.copy(direction.multiplyScalar(1.52));
@@ -830,7 +857,9 @@
         sync();
         if (p >= 1) animation = null;
       }
-      if (!prefersReducedMotion && !c.dragging()) c.group.rotation.y += .00045;
+      // Spin about z: after the -PI/2 x-tilt that is the |0>-|1> pole axis,
+      // so the sphere turns in place instead of tumbling.
+      if (!prefersReducedMotion && !c.dragging()) c.group.rotation.z += .00045;
     });
     return { setVector, applyGate, getVector: () => [...vector] };
   }
